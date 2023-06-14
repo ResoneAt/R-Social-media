@@ -1,39 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-# Create your models here.
-
-
-class MyUserManager(BaseUserManager):
-    def create_user(self, email, username, password=None):
-        """
-        Creates and saves a User with the given email, date of
-        birth and password.
-        """
-        if not email:
-            raise ValueError("Users must have an email address")
-
-        user = self.model(
-            email=self.normalize_email(email),
-            username=username,
-        )
-
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, username, password=None):
-        """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
-        """
-        user = self.create_user(
-            email,
-            password=password,
-            username=username
-        )
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
+from django.contrib.auth.models import AbstractBaseUser
+from .manager import MyUserManager
 
 
 class User(AbstractBaseUser):
@@ -81,8 +48,8 @@ class User(AbstractBaseUser):
 
 
 class RelationModel(models.Model):
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
     created_at = models.DateTimeField(auto_now_add=True)
     allowed = models.BooleanField(default=False)
 
