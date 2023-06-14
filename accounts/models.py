@@ -1,39 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-# Create your models here.
-
-
-class MyUserManager(BaseUserManager):
-    def create_user(self, email, username, password=None):
-        """
-        Creates and saves a User with the given email, date of
-        birth and password.
-        """
-        if not email:
-            raise ValueError("Users must have an email address")
-
-        user = self.model(
-            email=self.normalize_email(email),
-            username=username,
-        )
-
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, username, password=None):
-        """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
-        """
-        user = self.create_user(
-            email,
-            password=password,
-            username=username
-        )
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
+from django.contrib.auth.models import AbstractBaseUser
+from .manager import MyUserManager
 
 
 class User(AbstractBaseUser):
@@ -78,3 +45,29 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+
+class RelationModel(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    created_at = models.DateTimeField(auto_now_add=True)
+    allowed = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('from_user', 'to_user')
+
+    def __str__(self):
+        return f'{self.from_user.username} follows {self.to_user.username}'
+
+
+
+
+
+
+
+
+
+
+
+
+
