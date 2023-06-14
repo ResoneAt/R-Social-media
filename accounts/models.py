@@ -68,7 +68,7 @@ class ImageUserModel(models.Model):
 
 class ReportUserModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_reported = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_reported = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reported_user')
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
