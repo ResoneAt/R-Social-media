@@ -60,6 +60,18 @@ class RelationModel(models.Model):
         return f'{self.from_user.username} follows {self.to_user.username}'
 
 
+class ImageUserModel(models.Model):
+    image = models.ImageField(upload_to='user')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='image')
+    alt = models.CharField(max_length=73)
+
+
+class ReportUserModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_reported = models.ForeignKey(User, on_delete=models.CASCADE)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
 
 
