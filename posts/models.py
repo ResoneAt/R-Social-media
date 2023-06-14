@@ -14,3 +14,16 @@ class PostModel(models.Model):
 
     def __str__(self):
         return self.slug
+
+
+class ImagePostModel(models.Model):
+    image = models.ImageField(upload_to='posts')
+    post = models.ForeignKey(PostModel, on_delete=models.CASCADE)
+    alt = models.CharField(max_length=73)
+
+
+class ReportPostModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    post = models.ForeignKey(PostModel, on_delete=models.PROTECT)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
