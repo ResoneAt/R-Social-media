@@ -61,7 +61,7 @@ class RelationModel(models.Model):
 
 
 class ImageUserModel(models.Model):
-    image = models.ImageField(upload_to='user')
+    image = models.ImageField(upload_to='users')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='image')
     alt = models.CharField(max_length=73)
 
