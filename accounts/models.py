@@ -72,11 +72,28 @@ class ReportUserModel(models.Model):
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.user_reported.username} - {self.body[:20]}...'
 
 
+class MessageModel(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.from_user.username} to {self.to_user.username} - {self.message[:20]}...'
 
 
+class NotificationModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=73)
+    body = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.title} for user {self.user.username}'
 
 
 
