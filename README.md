@@ -5,6 +5,7 @@ A brief description of the project.
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+  - [ERD](#ERD) 
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
