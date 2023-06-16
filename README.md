@@ -17,7 +17,7 @@ A brief description of the project.
 This section should provide instructions on how to get started with the project. It should include any prerequisites that need to be installed, as well as instructions on how to install the project.
 
 
-## ERD
+### ERD
 
   <img src="ERD socialmedia.jpg" alt="عنوان تصویر">
 
