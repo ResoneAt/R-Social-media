@@ -8,10 +8,15 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=73, blank=True, null=True)
     last_name = models.CharField(max_length=73, blank=True, null=True )
     bio = models.TextField(max_length=730, blank=True, null=True)
+
     male = 1
     female = 2
     gender_choice = ((male, 'male'),(female, 'female'))
     gender = models.IntegerField(choices=gender_choice, blank=True, null=True)
+
+    account_type_choices = (('public', 'Public'), ('privet', 'Privet'))
+    account_type = models.CharField(max_length=10, choices=account_type_choices, default='public')
+
     phone_number = models.CharField(max_length=11, blank=True, null=True)
     email = models.EmailField(
         verbose_name="email address",
@@ -45,6 +50,32 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+    def get_follower_count(self):
+        return self.follower.count()
+
+    def get_following_count(self):
+        return self.following.count()
+
+    def is_following(self, user):
+        return self.following.filter(to_user=user).exists()
+
+    def is_followed_by(self, user):
+        return self.follower.filter(from_user=user).exists()
+
+    def follow(self, user):
+        relation = RelationModel(from_user=self, to_user=user)
+        relation.save()
+
+    def unfollow(self, user):
+        relation = RelationModel.objects.get(from_user=self, to_user=user)
+        relation.delete()
+
+    def get_follower_list(self):
+        return User.objects.filter(following__to_user=self)
+
+    def get_following_list(self):
+        return User.objects.filter(follower__from_user=self)
 
 
 class RelationModel(models.Model):
