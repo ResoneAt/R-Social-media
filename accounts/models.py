@@ -51,7 +51,6 @@ class RelationModel(models.Model):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
     created_at = models.DateTimeField(auto_now_add=True)
-    allowed = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('from_user', 'to_user')
