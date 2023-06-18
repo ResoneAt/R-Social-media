@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .manager import MyUserManager
+from django.urls import reverse
 
 
 class User(AbstractBaseUser):
@@ -71,11 +72,34 @@ class User(AbstractBaseUser):
         relation = RelationModel.objects.get(from_user=self, to_user=user)
         relation.delete()
 
+    def follow_request(self, user):
+        request = FollowRequestModel(from_user=self, to_user=user)
+        request.save()
+
     def get_follower_list(self):
         return User.objects.filter(following__to_user=self)
 
     def get_following_list(self):
         return User.objects.filter(follower__from_user=self)
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_active = False
+        self.save()
+
+    def profile_images(self):
+        return ImageUserModel.objects.filter(user=self)
+
+    def main_profile_image(self):
+        return ImageUserModel.objects.filter(user=self).latest()
+
+    def get_user_posts(self):
+        ...
+
+    def get_absolute_url(self):
+        kwargs = {
+            'user_id': self.pk
+        }
+        return reverse('user_profile', kwargs=kwargs)
 
 
 class RelationModel(models.Model):
@@ -99,13 +123,17 @@ class FollowRequestModel(models.Model):
         unique_together = ('from_user', 'to_user')
 
     def __str__(self):
-        return f'{self.from_user} to {self.to_user} - {self.created_at}'
+        return f'{self.from_user.username} to {self.to_user.username} - {self.created_at}'
 
 
 class ImageUserModel(models.Model):
     image = models.ImageField(upload_to='users')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='image')
     alt = models.CharField(max_length=73)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.alt} - user : {self.user.username}'
 
 
 class ReportUserModel(models.Model):
