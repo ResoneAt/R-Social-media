@@ -82,6 +82,9 @@ class User(AbstractBaseUser):
 
     def get_following_list(self):
         return User.objects.filter(follower__from_user=self)
+    
+    def get_follow_request_list(self):
+        return FollowRequestModel.objects.filter(to_user=self)
 
     def delete(self, using=None, keep_parents=False):
         self.is_active = False
