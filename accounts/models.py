@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .manager import MyUserManager
 from django.urls import reverse
+from posts.models import PostModel
 
 
 class User(AbstractBaseUser):
@@ -92,8 +93,19 @@ class User(AbstractBaseUser):
     def main_profile_image(self):
         return ImageUserModel.objects.filter(user=self).latest()
 
+    def get_report_post_list(self):
+        return ReportUserModel.objects.filter(user=self)
+
     def get_user_posts(self):
-        ...
+        PostModel.objects.filter(user=self)
+
+    def change_to_privet_user_account_type(self):
+        if self.account_type is 'public':
+            self.account_type = 'privet'
+
+    def change_to_public_user_account_type(self):
+        if self.account_type is 'privet':
+            self.account_type = 'public'
 
     def get_absolute_url(self):
         kwargs = {

@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from accounts.models import User
 # Create your models here.
 
@@ -14,6 +15,37 @@ class PostModel(models.Model):
 
     def __str__(self):
         return self.slug
+
+    def comment_count(self):
+        return self.comment.count()
+
+    def like_count(self):
+        return self.liked_post.count()
+
+    def get_comments_list(self):
+        return CommentModel.objects.filter(post=self)
+
+    def get_liker_list(self):
+        return User.objects.filter(liker__post=self)
+
+    def post_images(self):
+        return ImagePostModel.objects.filter(post=self)
+
+    def post_movies(self):
+        return MoviePostModel.objects.filter(post=self)
+
+    def get_report_list(self):
+        return ReportPostModel.objects.filter(post=self)
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_active = False
+        self.save()
+
+    def get_absolute_url(self):
+        kwargs = {
+            'slug': self.slug
+        }
+        return reverse('post_detail', kwargs=kwargs)
 
 
 class ImagePostModel(models.Model):
