@@ -1,16 +1,16 @@
 from django.db import models
 from django.urls import reverse
 from accounts.models import User
+from core.models import BaseModel
 # Create your models here.
 
 
-class PostModel(models.Model):
+class PostModel(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField()
     slug = models.SlugField()
     location = models.CharField(max_length=730,blank=True, null=True)
-    created_time = models.DateTimeField(auto_created=True, auto_now_add=True)
-    updated_time = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -62,30 +62,27 @@ class MoviePostModel(models.Model):
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE)
 
 
-class ReportPostModel(models.Model):
+class ReportPostModel(BaseModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='reporter')
     post = models.ForeignKey(PostModel, on_delete=models.PROTECT, related_name='reported_post')
     body = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.post} - {self.body[:20]}'
 
 
-class LikeModel(models.Model):
+class LikeModel(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liker')
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='liked_post')
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.post}-{self.user.username}'
 
 
-class CommentModel(models.Model):
+class CommentModel(BaseModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment_author')
     body = models.TextField()
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='comment')
-    created_at = models.DateTimeField(auto_now_add=True)
     replay_to = models.ForeignKey('self', on_delete=models.PROTECT, null=True, blank=True)
     is_replay = models.BooleanField(default=False)
 

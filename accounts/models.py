@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .manager import MyUserManager
+from core.models import BaseModel
 from django.urls import reverse
-from posts.models import PostModel
+
 
 
 class User(AbstractBaseUser):
@@ -82,7 +83,7 @@ class User(AbstractBaseUser):
 
     def get_following_list(self):
         return User.objects.filter(follower__from_user=self)
-    
+
     def get_follow_request_list(self):
         return FollowRequestModel.objects.filter(to_user=self)
 
@@ -99,15 +100,12 @@ class User(AbstractBaseUser):
     def get_report_post_list(self):
         return ReportUserModel.objects.filter(user=self)
 
-    def get_user_posts(self):
-        PostModel.objects.filter(user=self)
-
     def change_to_privet_user_account_type(self):
-        if self.account_type is 'public':
+        if self.account_type == 'public':
             self.account_type = 'privet'
 
     def change_to_public_user_account_type(self):
-        if self.account_type is 'privet':
+        if self.account_type == 'privet':
             self.account_type = 'public'
 
     def get_absolute_url(self):
@@ -117,10 +115,9 @@ class User(AbstractBaseUser):
         return reverse('user_profile', kwargs=kwargs)
 
 
-class RelationModel(models.Model):
+class RelationModel(BaseModel):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
-    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('from_user', 'to_user')
@@ -129,10 +126,9 @@ class RelationModel(models.Model):
         return f'{self.from_user.username} follows {self.to_user.username}'
 
 
-class FollowRequestModel(models.Model):
+class FollowRequestModel(BaseModel):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sent')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receive')
-    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('from_user', 'to_user')
@@ -150,31 +146,28 @@ class ImageUserModel(models.Model):
         return f'{self.alt} - user : {self.user.username}'
 
 
-class ReportUserModel(models.Model):
+class ReportUserModel(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     user_reported = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reported_user')
     body = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.user_reported.username} - {self.body[:20]}...'
 
 
-class MessageModel(models.Model):
+class MessageModel(BaseModel):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
     message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.from_user.username} to {self.to_user.username} - {self.message[:20]}...'
 
 
-class NotificationModel(models.Model):
+class NotificationModel(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=73)
     body = models.TextField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.title} for user {self.user.username}'
