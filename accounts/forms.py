@@ -75,3 +75,8 @@ class SignupUserForm(forms.Form):
         if user:
             raise ValidationError('This username already exist!...')
         return username
+
+
+class LoginUserForm(forms.Form):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))

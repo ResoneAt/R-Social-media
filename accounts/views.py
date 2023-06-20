@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import View
-from .forms import SignupUserForm
+from .forms import SignupUserForm, LoginUserForm
 from .models import RelationModel
 from .models import User
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 
 
 class SignupView(View):
@@ -28,15 +28,40 @@ class SignupView(View):
 
 
 class LoginView(View):
+    form_class = LoginUserForm
+    template_name = 'accounts/login_form.html'
+
+    def setup(self, request, *args, **kwargs):
+        self.next = request.GET.get('next')
+        return super().setup(request, *args, **kwargs)
+
     def get(self, request):
-        ...
+        form = self.form_class()
+        return render(request, self.template_name, {'login_form': form})
 
     def post(self, request):
-        ...
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(request, email=cd['email'], password=cd['password'])
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'You logged in successfully', 'success')
+                if self.next:
+                    return redirect(self.next)
+                return redirect('home:home')
+            messages.error(request, 'username or password is wrong!', 'danger')
+        return render(request, self.template_name, {'login_form': form})
 
 
 class LogoutView(View):
-    ...
+    def get(self, request):
+        if request.user.is_authenticated:
+            logout(request)
+            # messages.warning(request, 'you are logout ...', 'warning')
+            return redirect('home:home')
+        messages.error(request, 'you can not do this action', 'danger')
+        return redirect('accounts:login')
 
 
 class ProfileView(View):
