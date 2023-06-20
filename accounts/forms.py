@@ -46,3 +46,32 @@ class UserChangeForm(forms.ModelForm):
         model = User
         fields = ["email", "password", "is_active", "is_admin"]
 
+
+class SignupUserForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Enter your username'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}),
+                                label='password')
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm your password'}),
+                                label='confirm password')
+
+    def clean(self):
+        cd = super().clean()
+        p1 = cd.get('password1')
+        p2 = cd.get('password2')
+        if p1 and p2 and p1 != p2 :
+            raise ValidationError('Passwords must match!')
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        user = User.objects.filter(email=email).exists()
+        if user:
+            raise ValidationError('This email already exist!...')
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        user = User.objects.filter(username=username).exists()
+        if user:
+            raise ValidationError('This username already exist!...')
+        return username
