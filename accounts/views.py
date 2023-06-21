@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import View
-from accounts.authenticate import EmailOrUsernameBackend
 from .forms import SignupUserForm, LoginUserForm
+from .authenticate import UsernameBackend
 from .models import RelationModel
 from .models import User
 from django.contrib.auth import login, logout, authenticate
@@ -52,9 +52,9 @@ class LoginView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = EmailOrUsernameBackend.authenticate(request,username=cd['username'],password=cd['password'])
+            user = authenticate(request, username=cd['username'],password=cd['password'])
             if user is not None:
-                login(request, user, backend='accounts.authenticate.EmailOrUsernameBackend')
+                login(request, user)
                 # messages.success(request, 'You logged in successfully', 'success')
                 if self.next:
                     return redirect(self.next)
@@ -74,7 +74,9 @@ class LogoutView(View):
 
 
 class ProfileView(View):
-    ...
+    def get(self, request, user_id):
+        user = User.objects.get(pk=user_id)
+
 
 
 class EditProfile(View):
