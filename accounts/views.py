@@ -59,9 +59,9 @@ class LogoutView(View):
         if request.user.is_authenticated:
             logout(request)
             # messages.warning(request, 'you are logout ...', 'warning')
-            return redirect('home:home')
+            return redirect('accounts:login')
         messages.error(request, 'you can not do this action', 'danger')
-        return redirect('accounts:login')
+        return redirect('home:home')
 
 
 class ProfileView(View):
