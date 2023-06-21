@@ -26,7 +26,7 @@ class SignupView(View):
         if form.is_valid():
             cd = form.cleaned_data
             user = User.objects.create_user(email=cd['email'], username=cd['username'], password=cd['password1'])
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('home:home')
         return render(request, self.template_name, {'signup_form': form})
 
@@ -76,6 +76,7 @@ class LogoutView(View):
 class ProfileView(View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
+        return render(request, 'accounts/profile.html', {'user_detail':user})
 
 
 

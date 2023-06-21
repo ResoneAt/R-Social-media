@@ -111,7 +111,7 @@ class User(AbstractBaseUser):
         kwargs = {
             'user_id': self.pk
         }
-        return reverse('user_profile', kwargs=kwargs)
+        return reverse('accounts:user_profile', kwargs=kwargs)
 
 
 class RelationModel(BaseModel):

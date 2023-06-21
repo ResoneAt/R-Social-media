@@ -1,7 +1,7 @@
 <div class="navigation">
    <div class="logo">
-      <a class="no-underline" href="#">
-      R Social Media
+      <a class="no-underline" href="{% url 'home:home' %}">
+         Resonegram
       </a>
    </div>
    <div class="navigation-search-container">
@@ -36,7 +36,7 @@
             </div>
          </i>
       </a>
-      <a href="#" class="navigation-link">
+      <a href="{{ request.user.get_absolute_url }}" class="navigation-link">
       <i class="far fa-user-circle"></i>
       </a>
       <p style="margin-left:6px;">{{ request.user.username }}</p>
