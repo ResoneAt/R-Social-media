@@ -1,0 +1,140 @@
+/* Official and not clone */
+@import url('//fonts.cdnfonts.com/css/billabong');
+
+body {
+	background: #fafafa;
+}
+main {
+  font-family: system-ui, sans-serif;
+  height: 300vh;
+  margin-block-start: 10rem;
+  text-align: center;
+}
+.navigation {
+    background: rgba(255,255,255,0.9);
+    box-shadow: -1px 4px 28px 0px rgba(0,0,0,0.75);
+	height: 55px;
+	position: fixed;
+	width: 100%;
+	top: 12px;
+	left:0;
+	right:50px;
+	border-radius:24px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.0975);
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	padding: 0px 50px;
+	box-sizing: border-box;
+	z-index: 2;
+	/* animation magic */
+	transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	-moz-transition: all 0.4s ease-in-out;
+}
+
+.shrink {
+	height: 50px;
+}
+
+.navigation .logo a {
+	position: relative;
+	color: #000000;
+	font-size: 30px;
+	font-family: "billabong", sans-serif;
+	text-decoration: none;
+}
+
+.navigation-search-container {
+	position: relative;
+}
+
+.navigation-search-container input {
+	background-color: #fafafa;
+	padding: 3px 20px;
+	padding-left: 25px;
+	height: 30px;
+	box-sizing: border-box;
+	border: 1px solid rgba(0, 0, 0, 0.0975);
+	border-radius: 12px;
+	font-size: 14px;
+}
+
+.navigation-search-container .fa-search {
+	position: absolute;
+	top: 5px;
+	left: 10px;
+	font-size: 11px;
+	color: rgba(0, 0, 0, 0.5);
+}
+
+@media only screen and (min-width: 320px) and (max-width: 650px) {
+
+	/* Navigation */
+	.navigation {
+		padding: 0 20px;
+		justify-content: space-between;
+	}
+
+	.navigation-search-container {
+		display: none;
+	}
+
+	.navigation-icons {
+		display: flex;
+	}
+}
+
+.navigation-icons {
+	display: flex;
+}
+
+.navigation-search-container input:focus {
+	outline: none;
+}
+
+.navigation-search-container input::placeholder {
+	text-align: center;
+}
+
+.navigation-icons a {
+	text-decoration: none;
+}
+
+.navigation-link i {
+	margin-left: 30px;
+	color: black;
+	text-decoration: none;
+	font-size: 22px;
+}
+
+.notification-bubble-wrapper {
+	position: relative;
+	top: -30px;
+	left: 17px;
+}
+
+.notification-bubble {
+	position: absolute;
+	min-width: 20px;
+	min-height: 20px;
+	border-radius: 50%;
+	background: #ff2c74;
+	color: #fff;
+	text-align: center;
+	font-size: 13px;
+	padding: 5px 5px 3px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+		Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+	font-weight: 500;
+	display: none;
+}
+.notification-bubble {
+    user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+
+/* Official and not clone */
