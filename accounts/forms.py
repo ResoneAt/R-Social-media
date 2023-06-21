@@ -78,5 +78,5 @@ class SignupUserForm(forms.Form):
 
 
 class LoginUserForm(forms.Form):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'email or username'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'password'}))
