@@ -89,6 +89,7 @@ class LikeModel(BaseModel):
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='liked_post')
 
     class Meta:
+        unique_together = ('user', 'post')
         verbose_name, verbose_name_plural = _("Like"), _("Likes")
 
     def __str__(self):
