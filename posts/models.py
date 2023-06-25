@@ -8,7 +8,6 @@ from django.utils.translation import gettext_lazy as _
 class PostModel(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField(help_text='Please write caption')
-    slug = models.SlugField(null=True, blank=True)
     location = models.CharField(max_length=730, blank=True, null=True,
                                 help_text='You can write the location of this post')
     updated_at = models.DateTimeField(auto_now=True)
@@ -18,7 +17,7 @@ class PostModel(BaseModel):
         verbose_name, verbose_name_plural = _("Post"), _("Posts")
 
     def __str__(self):
-        return self.slug
+        return self.user.email
 
     def comment_count(self):
         return self.comment.count()
@@ -58,7 +57,7 @@ class ImagePostModel(BaseModel):
     alt = models.CharField(max_length=73, help_text='please write alt for image.')
 
     class Meta:
-        verbose_name, verbose_name_plural = _("Post Image"), _("Post Images")
+        verbose_name, verbose_name_plural = _("Image"), _("Images")
 
     def __str__(self):
         return self.alt
@@ -69,7 +68,7 @@ class MoviePostModel(BaseModel):
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name, verbose_name_plural = _("Post Movie"), _("Post Movies")
+        verbose_name, verbose_name_plural = _("Movie"), _("Movies")
 
 
 class ReportPostModel(BaseModel):
