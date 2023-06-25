@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import View
-from .forms import SignupUserForm, LoginUserForm
+from .forms import SignupUserForm, LoginUserForm, EditProfileForm
 from .authenticate import UsernameBackend
 from .models import RelationModel
 from .models import User
@@ -79,13 +79,39 @@ class ProfileView(View):
         return render(request, 'accounts/profile.html', {'user_detail':user})
 
 
-
 class EditProfile(View):
-    ...
+    form_class = EditProfileForm
+    template_name = 'accounts/edit_profile.html'
+
+    def get(self, request, user_id):
+        if request.user.id == user_id:
+            form = self.form_class(instance=request.user)
+            return render(request, self.template_name, {'form': form})
+        return redirect('home:home')
+
+    def post(self, request):
+        form = self.form_class(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:user_profile', request.user.id)
+        return render(request, self.template_name, {'form': form})
 
 
 class DeleteAccountView(View):
-    ...
+    template_name = 'accounts/confirm_delete_account.html'
+
+    def get(self, request, user_id):
+        if request.user.id == user_id:
+            return render(request, self.template_name)
+        return redirect('home:home')
+
+    def post(self, request, user_id):
+        if request.user.id == user_id:
+            user = request.user
+            user.is_active = False
+            user.save()
+            return redirect('accounts:login')
+        return render(request, self.template_name)
 
 
 class FollowView(View):
