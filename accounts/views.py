@@ -76,10 +76,10 @@ class LogoutView(View):
 class ProfileView(View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
-        return render(request, 'accounts/profile.html', {'user_detail':user})
+        return render(request, 'accounts/profile.html', {'user':user})
 
 
-class EditProfile(View):
+class EditProfileView(View):
     form_class = EditProfileForm
     template_name = 'accounts/edit_profile.html'
 
@@ -89,7 +89,7 @@ class EditProfile(View):
             return render(request, self.template_name, {'form': form})
         return redirect('home:home')
 
-    def post(self, request):
+    def post(self, request, user_id):
         form = self.form_class(request.POST, instance=request.user)
         if form.is_valid():
             form.save()

@@ -11,7 +11,8 @@
               display:flex;
               width: 100%;
               height:240px">
-
+            <a class="btn btn-danger" style="height:30px" href=" {% url 'accounts:delete_account' user.id %} ">Delete account</a>
+            <a class="btn btn-primary" style="height:30px" href=" {% url 'accounts:edit_profile' user.id %} ">Edit Profile</a>
         </div>
         <div class="posts-kid" style="background:black;border-radius:37px;
               z-index:6;

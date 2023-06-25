@@ -29,7 +29,7 @@ class User(AbstractBaseUser):
         unique=True,
         help_text='Please enter your email.( example@mail.com )'
     )
-    date_of_birth = models.DateField(blank=True, null=True)
+    date_of_birth = models.DateField(blank=True, null=True, help_text='example : 2010-07-23')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
