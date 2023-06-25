@@ -2,26 +2,6 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from .models import RelationModel, FollowRequestModel, ImageUserModel, ReportUserModel, MessageModel, NotificationModel
-from django.conf import settings
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-settings.configure(
-    INSTALLED_APPS=[
-        'accounts',
-        'django.contrib.auth',
-        'django.contrib.contenttypes',
-        'django.contrib.sessions',
-    ],
-    DATABASES={
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-)
 
 
 class UserModelTest(TestCase):

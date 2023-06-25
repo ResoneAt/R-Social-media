@@ -1,8 +1,25 @@
 {% extends 'base.html' %}
 {% block main-content %}
 
-    <div style="margin-top:73px;">
-        {{ user.username }} - {{ user.email }}
+    <div class="parent" style="background:pink;padding:16px; border-radius:37px; z-index:5;
+                            width: 100%; height:auto;">
+
+        <div class="user-detail"
+             style="background:blue;
+              border-radius:37px;
+              z-index:6;
+              display:flex;
+              width: 100%;
+              height:240px">
+
+        </div>
+        <div class="posts-kid" style="background:black;border-radius:37px;
+              z-index:6;
+              display:flex;
+              width: 100%;
+              height:1000px">
+
+        </div>
     </div>
 
 {% endblock main-content %}
