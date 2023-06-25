@@ -1,8 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User
+from .models import User,ImageUserModel,NotificationModel,ReportUserModel,FollowRequestModel,MessageModel,RelationModel
 from .forms import UserCreationForm, UserChangeForm
+
+
+class UserImageInline(admin.TabularInline):
+    model = ImageUserModel
 
 
 class UserAdmin(BaseUserAdmin):
@@ -17,7 +21,8 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ["is_admin"]
     fieldsets = [
         (None, {"fields": ["username", "email", "password"]}),
-        ("Personal info", {"fields": ["first_name","last_name", "bio", "gender", "phone_number" , "date_of_birth",]}),
+        ("Personal info", {"fields": ["first_name","last_name", "bio", "gender", "phone_number" ,
+                                      'account_type', "date_of_birth",]}),
         ("Permissions", {"fields": ["is_admin", "is_active"]}),
     ]
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -34,6 +39,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ["email"]
     ordering = ["email"]
     filter_horizontal = []
+    inlines = [UserImageInline]
 
 
 # Now register the new UserAdmin...
@@ -41,3 +47,8 @@ admin.site.register(User, UserAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
+admin.site.register(MessageModel)
+admin.site.register(ReportUserModel)
+admin.site.register(NotificationModel)
+admin.site.register(FollowRequestModel)
+admin.site.register(RelationModel)
