@@ -115,23 +115,53 @@ class DeleteAccountView(View):
 
 
 class FollowView(View):
-    ...
-
-
-class FollowerListView(View):
-    ...
-
-
-class FollowingListView(View):
-    ...
+    def get(self, request, user_id):
+        if request.user.account_type == 'public':
+            if not User.is_following(request.user, user_id):
+                User.follow(request.user, user_id)
+                messages.success(request, 'your following success', 'success')
+            else:
+                messages.error(request, 'you can not follow this user again!', 'danger')
+            return redirect('accounts:user_profile', user_id)
+        messages.error(request, 'you can not follow this user. this account is privet!', 'danger')
+        return redirect('accounts:user_profile', user_id)
 
 
 class UnFollowView(View):
-    ...
+    def get(self, request, user_id):
+        if User.is_following(request.user, user_id):
+            User.unfollow(request.user, user_id)
+            messages.success(request, 'your Unfollowing success', 'success')
+        else:
+            messages.error(request, 'you can not unfollow this user', 'warning')
+        return redirect('accounts:user_profile', user_id)
+
+
+class FollowerListView(View):
+    template_name = 'accounts/follower_list.html'
+
+    def get(self, request, user_id):
+        if User.is_following(request.user, user_id):
+            follower = User.get_follower_list(user_id)
+            return render(request, self.template_name, {'follower': follower})
+        return redirect('accounts:user_profile', user_id)
+
+
+class FollowingListView(View):
+    template_name = 'accounts/following_list.html'
+
+    def get(self, request, user_id):
+        if User.is_following(request.user, user_id):
+            following = User.get_following_list(user_id)
+            return render(request, self.template_name, {'following': following})
+        return redirect('accounts:user_profile', user_id)
 
 
 class SentFollowRequest(View):
-    ...
+    def get(self, request, user_id):
+        if User.is_privet(user_id):
+            User.follow_request(request.user, user_id)
+        return redirect('accounts:user_profile', user_id)
 
 
 class FollowRequestList(View):
