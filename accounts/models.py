@@ -4,7 +4,7 @@ from .manager import MyUserManager
 from core.models import BaseModel
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-
+from django.shortcuts import get_object_or_404
 
 class User(AbstractBaseUser):
     username = models.CharField(max_length=73, unique=True, help_text='Please enter your username')
@@ -29,7 +29,7 @@ class User(AbstractBaseUser):
         unique=True,
         help_text='Please enter your email.( example@mail.com )'
     )
-    date_of_birth = models.DateField(blank=True, null=True)
+    date_of_birth = models.DateField(blank=True, null=True, help_text='example : 2010-07-23')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
@@ -40,6 +40,10 @@ class User(AbstractBaseUser):
 
     class Meta:
         verbose_name, verbose_name_plural = _("User"), _("Users")
+
+    def setup(self, request, *args, **kwargs):
+        self.user_instance = get_object_or_404(User, pk=kwargs['user_id'])
+        return super().setup(request, *args, **kwargs)
 
     def __str__(self):
         return self.email
@@ -66,29 +70,44 @@ class User(AbstractBaseUser):
     def get_following_count(self):
         return self.following.count()
 
-    def is_following(self, user):
+    def is_following(self, user_id):
+        user = User.objects.get(pk=user_id)
         return self.following.filter(to_user=user).exists()
 
-    def is_followed_by(self, user):
+    def is_followed_by(self, user_id):
+        user = User.objects.get(pk=user_id)
         return self.follower.filter(from_user=user).exists()
 
-    def follow(self, user):
+    def follow(self, user_id):
+        user = User.objects.get(pk=user_id)
         relation = RelationModel(from_user=self, to_user=user)
         relation.save()
 
-    def unfollow(self, user):
+    def unfollow(self, user_id):
+        user = User.objects.get(pk=user_id)
         relation = RelationModel.objects.get(from_user=self, to_user=user)
         relation.delete()
 
-    def follow_request(self, user):
+    def follow_request(self, user_id):
+        user = User.objects.get(pk=user_id)
         request = FollowRequestModel(from_user=self, to_user=user)
         request.save()
 
-    def get_follower_list(self):
-        return User.objects.filter(following__to_user=self)
+    @staticmethod
+    def is_privet(user_id):
+        user = User.objects.get(pk=user_id)
+        return user.account_type == 'privet'
 
-    def get_following_list(self):
-        return User.objects.filter(follower__from_user=self)
+
+    @staticmethod
+    def get_follower_list(user_id):
+        user = User.objects.get(pk=user_id)
+        return User.objects.filter(following__to_user=user)
+
+    @staticmethod
+    def get_following_list(user_id):
+        user = User.objects.get(pk=user_id)
+        return User.objects.filter(follower__from_user=user)
 
     def get_follow_request_list(self):
         return FollowRequestModel.objects.filter(to_user=self)
@@ -103,7 +122,7 @@ class User(AbstractBaseUser):
     def main_profile_image(self):
         return ImageUserModel.objects.filter(user=self).latest()
 
-    def get_report_post_list(self):
+    def get_report_user_list(self):
         return ReportUserModel.objects.filter(user=self)
 
     def change_to_privet_user_account_type(self):

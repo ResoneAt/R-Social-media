@@ -30,7 +30,7 @@ body-s {
 }
 
 .maincontent{
-    background: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.9);
     box-shadow: -1px 4px 28px 0px rgba(0,0,0,0.2);
 	position: fixed;
 	width: 100%;
@@ -56,7 +56,7 @@ main {
 }
 
 .navigation {
-    background: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.95);
 	height: 55px;
 	position: fixed;
 	width: 100%;

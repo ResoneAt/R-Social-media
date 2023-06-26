@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import View
-from .forms import SignupUserForm, LoginUserForm
+from .forms import SignupUserForm, LoginUserForm, EditProfileForm
 from .authenticate import UsernameBackend
 from .models import RelationModel
 from .models import User
@@ -76,36 +76,92 @@ class LogoutView(View):
 class ProfileView(View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
-        return render(request, 'accounts/profile.html', {'user_detail':user})
+        return render(request, 'accounts/profile.html', {'user':user})
 
 
+class EditProfileView(View):
+    form_class = EditProfileForm
+    template_name = 'accounts/edit_profile.html'
 
-class EditProfile(View):
-    ...
+    def get(self, request, user_id):
+        if request.user.id == user_id:
+            form = self.form_class(instance=request.user)
+            return render(request, self.template_name, {'form': form})
+        return redirect('home:home')
+
+    def post(self, request, user_id):
+        form = self.form_class(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:user_profile', request.user.id)
+        return render(request, self.template_name, {'form': form})
 
 
 class DeleteAccountView(View):
-    ...
+    template_name = 'accounts/confirm_delete_account.html'
+
+    def get(self, request, user_id):
+        if request.user.id == user_id:
+            return render(request, self.template_name)
+        return redirect('home:home')
+
+    def post(self, request, user_id):
+        if request.user.id == user_id:
+            user = request.user
+            user.is_active = False
+            user.save()
+            return redirect('accounts:login')
+        return render(request, self.template_name)
 
 
 class FollowView(View):
-    ...
-
-
-class FollowerListView(View):
-    ...
-
-
-class FollowingListView(View):
-    ...
+    def get(self, request, user_id):
+        if request.user.account_type == 'public':
+            if not User.is_following(request.user, user_id):
+                User.follow(request.user, user_id)
+                messages.success(request, 'your following success', 'success')
+            else:
+                messages.error(request, 'you can not follow this user again!', 'danger')
+            return redirect('accounts:user_profile', user_id)
+        messages.error(request, 'you can not follow this user. this account is privet!', 'danger')
+        return redirect('accounts:user_profile', user_id)
 
 
 class UnFollowView(View):
-    ...
+    def get(self, request, user_id):
+        if User.is_following(request.user, user_id):
+            User.unfollow(request.user, user_id)
+            messages.success(request, 'your Unfollowing success', 'success')
+        else:
+            messages.error(request, 'you can not unfollow this user', 'warning')
+        return redirect('accounts:user_profile', user_id)
+
+
+class FollowerListView(View):
+    template_name = 'accounts/follower_list.html'
+
+    def get(self, request, user_id):
+        if User.is_following(request.user, user_id):
+            follower = User.get_follower_list(user_id)
+            return render(request, self.template_name, {'follower': follower})
+        return redirect('accounts:user_profile', user_id)
+
+
+class FollowingListView(View):
+    template_name = 'accounts/following_list.html'
+
+    def get(self, request, user_id):
+        if User.is_following(request.user, user_id):
+            following = User.get_following_list(user_id)
+            return render(request, self.template_name, {'following': following})
+        return redirect('accounts:user_profile', user_id)
 
 
 class SentFollowRequest(View):
-    ...
+    def get(self, request, user_id):
+        if User.is_privet(user_id):
+            User.follow_request(request.user, user_id)
+        return redirect('accounts:user_profile', user_id)
 
 
 class FollowRequestList(View):

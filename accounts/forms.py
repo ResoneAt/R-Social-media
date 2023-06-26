@@ -80,3 +80,12 @@ class SignupUserForm(forms.Form):
 class LoginUserForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'email or username'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'password'}))
+
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email',
+                  'first_name', 'last_name', 'date_of_birth',
+                  'bio', 'gender', 'account_type', 'phone_number',
+                  ]
