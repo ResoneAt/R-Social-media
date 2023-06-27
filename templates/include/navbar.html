@@ -18,16 +18,21 @@
       <a href="#" target ="_blank" class="navigation-link">
       <i class="far fa-compass"></i>
       </a>
-      <a href="#" class="navigation-link notifica">
+      <a href="{% url 'accounts:follow_request_list' %}" class="navigation-link notifica">
          <i class="far fa-heart">
             <div class="notification-bubble-wrapper">
-               <div class="notification-bubble">
-                  <span class="notification-count">99</span>
+               {% if request.user.get_request_count > 0 %}
+               <div class="" style="position:absolut;">
+                  <span class="" style="position:absolute;
+                                        top:5px; border-radius:50%;
+                                        padding:4px 7px; background:red;
+                                        font-size:9px; color:white">{{ request.user.get_request_count }}</span>
                </div>
+               {% endif %}
             </div>
          </i>
       </a>
-      <a href="#" class="navigation-link notifica">
+      <a href="{% url 'accounts:chat_list' %}" class="navigation-link notifica">
          <i class="far fa-comment">
             <div class="notification-bubble-wrapper">
                <div class="notification-bubble">

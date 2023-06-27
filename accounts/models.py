@@ -65,18 +65,25 @@ class User(AbstractBaseUser):
         return self.is_admin
 
     def get_follower_count(self):
-        return self.follower.count()
+        return self.following.count()
 
     def get_following_count(self):
-        return self.following.count()
+        return self.follower.count()
+
+    def get_request_count(self):
+        return self.request_receive.count()
 
     def is_following(self, user_id):
         user = User.objects.get(pk=user_id)
-        return self.following.filter(to_user=user).exists()
+        return self.follower.filter(to_user=user).exists()
+
+    def is_follow_requesting(self, user_id):
+        user = User.objects.get(pk=user_id)
+        return self.request_sent.filter(to_user=user).exists()
 
     def is_followed_by(self, user_id):
         user = User.objects.get(pk=user_id)
-        return self.follower.filter(from_user=user).exists()
+        return self.following.filter(from_user=user).exists()
 
     def follow(self, user_id):
         user = User.objects.get(pk=user_id)
@@ -93,6 +100,18 @@ class User(AbstractBaseUser):
         request = FollowRequestModel(from_user=self, to_user=user)
         request.save()
 
+    def accept_follow_request(self, user_id):
+        user = User.objects.get(pk=user_id)
+        request = FollowRequestModel.objects.get(from_user=user, to_user=self)
+        request.delete()
+        User.follow(user, self.pk)
+
+    def reject_follow_request(self, user_id):
+        user = User.objects.get(pk=user_id)
+        request = FollowRequestModel.objects.get(from_user=user, to_user=self)
+        request.delete()
+
+
     @staticmethod
     def is_privet(user_id):
         user = User.objects.get(pk=user_id)
@@ -108,6 +127,9 @@ class User(AbstractBaseUser):
     def get_following_list(user_id):
         user = User.objects.get(pk=user_id)
         return User.objects.filter(follower__from_user=user)
+
+    def get_requests_list(self):
+        return FollowRequestModel.objects.filter(to_user=self)
 
     def get_follow_request_list(self):
         return FollowRequestModel.objects.filter(to_user=self)
@@ -193,6 +215,7 @@ class MessageModel(BaseModel):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
     message = models.TextField(help_text='Please write write your message')
+    is_read = models.BooleanField(default=False)
 
     class Meta:
         verbose_name, verbose_name_plural = _("Message"), _("Messages")

@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import User,ReportUserModel, MessageModel
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 
@@ -17,12 +17,25 @@ class UserCreationForm(forms.ModelForm):
         model = User
         fields = ["email"]
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        user = User.objects.filter(email=email).exists()
+        if user:
+            raise ValidationError('This email already exist')
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        user = User.objects.filter(username=username).exists()
+        if user:
+            raise ValidationError('This username already exist')
+        return username
+
     def clean_password2(self):
-        # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise ValidationError("Passwords don't match")
+            raise forms.ValidationError("Passwords don't match")
         return password2
 
     def save(self, commit=True):
@@ -89,3 +102,15 @@ class EditProfileForm(forms.ModelForm):
                   'first_name', 'last_name', 'date_of_birth',
                   'bio', 'gender', 'account_type', 'phone_number',
                   ]
+
+
+class ReportUserForm(forms.ModelForm):
+    class Meta:
+        model = ReportUserModel
+        fields = ['body']
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = MessageModel
+        fields = ['message']

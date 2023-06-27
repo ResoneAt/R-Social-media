@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block main-content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">{{ user.username }}</div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          {% for message in messages_list %}
+          <div class="media">
+            <div class="media-body">
+              <h5 class="mt-0 mb-1">{{ message.from_user.username }}</h5>
+              {{ message.message }}
+            </div>
+          </div>
+          {% empty %}
+          <p>No messages yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <form action="" method="post">
+            {% csrf_token %}
+            {{ form.message }}
+            <button type="submit" class="btn btn-primary">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<script>-->
+<!--&lt;!&ndash;  $(document).ready(function() {&ndash;&gt;-->
+<!--&lt;!&ndash;  var user_id = '{{ user.id }}';&ndash;&gt;-->
+<!--&lt;!&ndash;  $.ajax({&ndash;&gt;-->
+<!--&lt;!&ndash;    url: '/accounts/profile/message-seen/' + user_id + '/',&ndash;&gt;-->
+<!--&lt;!&ndash;    success: function(data) {&ndash;&gt;-->
+<!--&lt;!&ndash;      console.log('Messages marked as read.');&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;  });&ndash;&gt;-->
+<!--&lt;!&ndash;});&ndash;&gt;-->
+<!--</script>-->
+{% endblock %}
+

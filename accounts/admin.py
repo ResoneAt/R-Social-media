@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User,ImageUserModel,NotificationModel,ReportUserModel,FollowRequestModel,MessageModel,RelationModel
+from .models import User,ImageUserModel,NotificationModel,ReportUserModel,\
+    FollowRequestModel,MessageModel,RelationModel
 from .forms import UserCreationForm, UserChangeForm
 
 
