@@ -180,5 +180,71 @@ main {
   -ms-user-select: none;
 }
 
+.pv-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
 
-/* Official and not clone */
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.message-sender {
+  font-weight: bold;
+}
+
+.message-sent-at {
+  color: #999;
+}
+
+.message-body {
+  margin-top: 5px;
+}
+
+.user-info {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.user-info h2 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.user-info p {
+  margin-bottom: 5px;
+}
+
+.message-form {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.message-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.message-form input[type="submit"],
+.message-form button[type="submit"] {
+  margin-top: 10px;
+}
+```
+

@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.generic import View
-from .forms import SignupUserForm, LoginUserForm, EditProfileForm
+from .forms import SignupUserForm, LoginUserForm, EditProfileForm,ReportUserForm,MessageForm
 from .authenticate import UsernameBackend
-from .models import RelationModel
-from .models import User
+from .models import User, MessageModel
 from django.contrib.auth import login, logout, authenticate
+from django.http import JsonResponse
 
 
 class SignupView(View):
@@ -59,7 +59,7 @@ class LoginView(View):
                 if self.next:
                     return redirect(self.next)
                 return redirect('home:home')
-            # messages.error(request, 'username or password is wrong!', 'danger')
+            messages.error(request, 'username or password is wrong!', 'danger')
         return render(request, self.template_name, {'login_form': form})
 
 
@@ -75,8 +75,15 @@ class LogoutView(View):
 
 class ProfileView(View):
     def get(self, request, user_id):
-        user = User.objects.get(pk=user_id)
-        return render(request, 'accounts/profile.html', {'user':user})
+        user = get_object_or_404(User, pk=user_id, is_active=True)
+        is_following = User.is_following(request.user, user_id)
+        is_follow_requesting = User.is_follow_requesting(request.user, user_id)
+        context = {
+            'is_follow_requesting': is_follow_requesting,
+            'is_following': is_following,
+            'user': user,
+        }
+        return render(request, 'accounts/profile.html', context)
 
 
 class EditProfileView(View):
@@ -116,7 +123,7 @@ class DeleteAccountView(View):
 
 class FollowView(View):
     def get(self, request, user_id):
-        if request.user.account_type == 'public':
+        if not User.is_privet(user_id):
             if not User.is_following(request.user, user_id):
                 User.follow(request.user, user_id)
                 messages.success(request, 'your following success', 'success')
@@ -160,34 +167,106 @@ class FollowingListView(View):
 class SentFollowRequest(View):
     def get(self, request, user_id):
         if User.is_privet(user_id):
-            User.follow_request(request.user, user_id)
+            if not User.is_follow_requesting(request.user, user_id):
+                User.follow_request(request.user, user_id)
+                messages.success(request, 'your request sent success', 'success')
+            else:
+                messages.error(request, 'You have already sent a request!', 'success')
+        else:
+            messages.error(request, 'you can not sent request to this user', 'error')
         return redirect('accounts:user_profile', user_id)
 
 
 class FollowRequestList(View):
-    ...
+    def get(self, request):
+        requests = User.get_requests_list(request.user)
+        return render(request, 'accounts/request_list.html', {'requests': requests})
 
 
 class AcceptFollowRequest(View):
-    ...
+    def get(self, request, user_id):
+        User.accept_follow_request(request.user, user_id)
+        messages.success(request, 'your Accept request success', 'success')
+        return redirect('accounts:follow_request_list')
 
 
 class RejectFollowRequest(View):
-    ...
+    def get(self, request, user_id):
+        User.reject_follow_request(request.user, user_id)
+        messages.success(request, 'you are Reject request', 'success')
+        return redirect('accounts:follow_request_list')
 
 
 class ReportUserView(View):
-    ...
+    class_form = ReportUserForm
+    template_name = 'accounts/report.html'
+
+    def get(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)
+        form = self.class_form()
+        context = {
+            'reported_user': user,
+            'form': form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, user_id):
+        form = self.class_form(request.POST)
+        user = get_object_or_404(User, pk=user_id)
+        context = {
+            'reported_user': user,
+            'form': form
+        }
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.user = request.user
+            report.user_reported = user
+            report.save()
+            messages.success(request, 'Your report has been sent', 'success')
+            return redirect('accounts:user_profile', user_id)
+        else:
+            return render(request, self.template_name, context)
 
 
 class SentMessagesView(View):
-    ...
+    template_name = 'accounts/pv_messages.html'
+
+    def get(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)
+        form = MessageForm()
+        messages_list = MessageModel.objects.filter(from_user=request.user, to_user=user) |\
+                        MessageModel.objects.filter(from_user=user, to_user=request.user)
+        messages_list = messages_list.order_by('created_at')
+        context = {
+            'form': form,
+            'user': user,
+            'messages_list': messages_list,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.from_user = request.user
+            message.to_user = user
+            message.save()
+        return redirect('accounts:message', user.id)
 
 
 class MessagesListView(View):
-    ...
+    def get(self, request):
+        users = User.objects.filter(receiver__from_user=request.user).distinct()
+        context = {
+            'users': users
+        }
+        return render(request, 'accounts/chat_list.html', context)
 
 
-class MessagePrivetPageView(View):
-    ...
+# def mark_messages_as_read(request, user_id):
+#     user = get_object_or_404(User, pk=user_id)
+#     MessageModel.objects.filter(from_user=user, to_user=request.user, is_read=False).update(is_read=True)
+#     return JsonResponse({'success': True})
+
 
