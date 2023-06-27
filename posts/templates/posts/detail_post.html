@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block main-content %}
+    <div class="card" style="z-index:1;">
+        <a href="{% url 'accounts:user_profile' post.user.id %}" style="text-decoration:none; font-size:20px; background-color:lavender;" class="card-body">{{ post.user }}</a>
+        <p class="card-body">{{ post.body }}</p>
+        <small class="card-body" style="margin-top:-30px; color:#C0C0C0; font-size:12px;">{{ post.updated_time|date:"D j M o" }}</small>
+        {% if not is_like %}
+            <a class="btn btn-outline-primary btn-sm col-md-1" href="{% url 'accounts:like_post' post.id %}">{{ like }} Like</a>
+        {% else %}
+            <a class="btn btn-outline-secondary btn-sm col-md-1" href="{% url 'accounts:dislike_post' post.id %}">{{ like }} Like</a>
+        {% endif %}
+
+        <div class="card" style="background-color:DimGrey;">
+            <h5 align="center" style="color:white; margin-top:10px;">Comments</h5>
+            {% for comment in comments %}
+                <div class="card" style="background-color:DarkGray; margin:16px;">
+                    <h5 style="color:DarkSlateBlue; border-radius:10px 10px 0px 0px; margin:10px 10px 0px 10px; padding:10px 10px 0px 10px;">{{ comment.user }}</h5>
+                    <span style="color:FloralWhite; border-radius:0px 10px 10px 10px; margin:0px 10px 10px 10px; padding:10px;">{{ comment.body }}</span>
+                    <small style="color:Gainsboro; font-size:12px; margin:0px 10px 10px 10px; padding-left:10px;">{{ comment.created_at|timesince }} ago</small>
+                </div>
+            {% endfor %}
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.label_tag }}
+                    {{ form.as_p }}
+                    <input type="submit" value="Send" class="btn btn-info" style="float:right; display:inline; width:5%; margin-right:20px; margin-top:-57px;">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if request.user.id == post.user.id %}
+        <a style="float:right;" href="{% url 'accounts:delete_post' post.id %}" class="btn btn-danger">Delete</a>
+        <a style="float:right;" href="{% url 'accounts:edit_post' post.id %}" class="btn btn-info">Update</a>
+    {% endif %}
+{% endblock %}
