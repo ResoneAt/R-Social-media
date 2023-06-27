@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block main-content %}
+
+    {% for follow_request in requests %}
+
+        <h5>{{ follow_request }}</h5>
+        <a href="{% url 'accounts:accept_request' follow_request.from_user.id %}" class="btn btn-success">Accept</a>
+        <a href="{% url 'accounts:reject_request' follow_request.from_user.id %}" class="btn btn-danger">Reject</a>
+
+    {% endfor %}
+
+{% endblock main-content %}

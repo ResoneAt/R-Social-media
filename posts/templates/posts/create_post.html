@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block main-content %}
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">Create a new post</h1>
+  </div>
+  <div class="card-body">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <hr>
+      <label for="{{ image_formset.prefix }}">Images:</label>
+      {{ image_formset.management_form }}
+      {% for form in image_formset.forms %}
+        <div class="form-group">
+          {{ form.as_p }}
+          {% if form.instance.pk %}
+            <img src="{{ form.instance.image.url }}" alt="{{ form.instance.image.name }}" width="200">
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

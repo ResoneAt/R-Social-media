@@ -1,42 +1,43 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'accounts:signup' %}">Signup</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'accounts:login' %}">logout</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled">Disabled</a>
-        </li>
-      </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-</nav>
+<div class="navigation">
+   <div class="logo">
+      <a class="no-underline" href="{% url 'home:home' %}">
+         Resonegram
+      </a>
+   </div>
+   <div class="navigation-icons">
+      <a href="#" target ="_blank" class="navigation-link">
+      <i class="far fa-compass"></i>
+      </a>
+      <a href="{% url 'accounts:follow_request_list' %}" class="navigation-link notifica">
+         <i class="far fa-heart">
+            <div class="notification-bubble-wrapper">
+               {% if request.user.get_request_count > 0 %}
+               <div class="" style="position:absolut;">
+                  <span class="" style="position:absolute;
+                                        top:5px; border-radius:50%;
+                                        padding:4px 7px; background:red;
+                                        font-size:9px; color:white">{{ request.user.get_request_count }}</span>
+               </div>
+               {% endif %}
+            </div>
+         </i>
+      </a>
+      <a href="{% url 'accounts:chat_list' %}" class="navigation-link notifica">
+         <i class="far fa-comment">
+            <div class="notification-bubble-wrapper">
+               <div class="notification-bubble">
+                  <span class="notification-count">99</span>
+               </div>
+            </div>
+         </i>
+      </a>
+      <a href="{{ request.user.get_absolute_url }}" class="navigation-link">
+      <i class="far fa-user-circle"></i>
+      </a>
+      <p style="margin-left:6px;">{{ request.user.username }}</p>
+      <a href="{% url 'accounts:logout' %}" id="signout" class="navigation-link">
+      <i class="fas fa-sign-out-alt"></i>
+      </a>
+   </div>
+</div>
+

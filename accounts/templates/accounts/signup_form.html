@@ -11,20 +11,35 @@
       <div class="bg-img" style="background:url(' {% static 'images/bg.jpg' %}'); background-size: cover; ')">
          <div class="content">
             <header>Signup</header>
-            <form action="" method="POST">
+            <form action="" method="POST" novalidate>
                {% csrf_token %}
                <div class="field">
                   <span class="fa fa-user"></span>
                   {{signup_form.username}}
                </div>
+               <div class="signup" style='background:red;'>
+                  {% for error in signup_form.username.errors %}
+                     {{error}}
+                  {% endfor %}
+               </div>
                <div class="field space">
                   <span class="fa fa-envelope"></span>
                   {{signup_form.email}}
+               </div>
+               <div class="signup" style='background:red;'>
+                  {% for error in signup_form.email.errors %}
+                     {{error}}
+                  {% endfor %}
                </div>
                <div class="field space">
                   <span class="fa fa-lock"></span>
                   {{ signup_form.password1 }}
                   <span class="show">SHOW</span>
+               </div>
+               <div class="signup" style='background:red;'>
+                  {% for error in signup_form.password2.errors %}
+                     {{ error }}
+                  {% endfor %}
                </div>
                <div class="field space">
                   <span class="fa fa-lock"></span>
@@ -35,7 +50,6 @@
                   <input type="submit" value="SIGNUP">
                </div>
             </form>
-
             <div class="login">
                Or login with
             </div>

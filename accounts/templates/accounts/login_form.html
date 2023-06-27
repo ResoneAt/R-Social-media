@@ -9,13 +9,14 @@
    </head>
    <body>
       <div class="bg-img" style="background:url(' {% static 'images/bg.jpg' %}'); background-size: cover; ')">
+    {% include 'include/messages.html' %}
          <div class="content">
             <header>Login</header>
             <form action="" method="POST" novalidate>
                {% csrf_token %}
                <div class="field">
                   <span class="fa fa-user"></span>
-                  {{login_form.email}}
+                  {{login_form.username}}
                </div>
                <div class="field space">
                   <span class="fa fa-lock"></span>

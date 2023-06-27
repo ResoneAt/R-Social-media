@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block main-content %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <h4>Did you intend to report {{ reported_user.username }}? Write your reason.</h4>
+        {{ form }}
+        <input class="btn btn-success" type="submit" value="sent">
+        <a href="{% url 'accounts:user_profile' reported_user.id %}" class="btn btn-warning">cancel</a>
+    </form>
+
+{% endblock main-content %}

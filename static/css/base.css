@@ -1,0 +1,250 @@
+/* Official and not clone */
+@import url('//fonts.cdnfonts.com/css/billabong');
+{% load static %}
+
+body {
+  background: url('{% static 'images/homee.png' %}');
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+
+body-s {
+	background: linear-gradient(-45deg, #06DDFE, #000357, #570043, #BC06FE);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+
+}
+
+@keyframes gradient-s {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.maincontent{
+    background: rgba(255,255,255,0.9);
+    box-shadow: -1px 4px 28px 0px rgba(0,0,0,0.2);
+	position: fixed;
+	width: 100%;
+	top: 76px;
+	bottom:6px;
+	left:0;
+	border-radius:24px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.0975);
+	display: relative;
+	align-items: center;
+	justify-content: space-around;
+	padding: 16px 16px;
+	box-sizing: border-box;
+	z-index: 2;
+	overflow-y:scroll;
+	overflow-x:hidden;
+}
+main {
+  font-family: system-ui, sans-serif;
+  height: 300vh;
+  margin-block-start: 10rem;
+  text-align: center;
+}
+
+.navigation {
+    background: rgba(255,255,255,0.95);
+	height: 55px;
+	position: fixed;
+	width: 100%;
+	top: 12px;
+	left:0;
+	right:50px;
+	border-radius:24px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.0975);
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	padding: 0px 50px;
+	box-sizing: border-box;
+	z-index: 2;
+	/* animation magic */
+	transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	-moz-transition: all 0.4s ease-in-out;
+}
+
+.shrink {
+	height: 50px;
+}
+
+.navigation .logo a {
+	position: relative;
+	color: #000000;
+	font-size: 30px;
+	font-family: "billabong", sans-serif;
+	text-decoration: none;
+}
+
+.navigation-search-container {
+	position: relative;
+}
+
+.navigation-search-container input {
+	background-color: #fafafa;
+	padding: 3px 20px;
+	padding-left: 25px;
+	height: 30px;
+	box-sizing: border-box;
+	border: 1px solid rgba(0, 0, 0, 0.0975);
+	border-radius: 12px;
+	font-size: 14px;
+}
+
+.navigation-search-container .fa-search {
+	position: absolute;
+	top: 5px;
+	left: 10px;
+	font-size: 11px;
+	color: rgba(0, 0, 0, 0.5);
+}
+
+@media only screen and (min-width: 320px) and (max-width: 650px) {
+
+	/* Navigation */
+	.navigation {
+		padding: 0 20px;
+		justify-content: space-between;
+	}
+
+	.navigation-search-container {
+		display: none;
+	}
+
+	.navigation-icons {
+		display: flex;
+	}
+}
+
+.navigation-icons {
+	display: flex;
+}
+
+.navigation-search-container input:focus {
+	outline: none;
+}
+
+.navigation-search-container input::placeholder {
+	text-align: center;
+}
+
+.navigation-icons a {
+	text-decoration: none;
+}
+
+.navigation-link i {
+	margin-left: 30px;
+	color: black;
+	text-decoration: none;
+	font-size: 22px;
+}
+
+.notification-bubble-wrapper {
+	position: relative;
+	top: -30px;
+	left: 17px;
+}
+
+.notification-bubble {
+	position: absolute;
+	min-width: 20px;
+	min-height: 20px;
+	border-radius: 50%;
+	background: #ff2c74;
+	color: #fff;
+	text-align: center;
+	font-size: 13px;
+	padding: 5px 5px 3px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+		Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+	font-weight: 500;
+	display: none;
+}
+.notification-bubble {
+    user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.pv-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.message-sender {
+  font-weight: bold;
+}
+
+.message-sent-at {
+  color: #999;
+}
+
+.message-body {
+  margin-top: 5px;
+}
+
+.user-info {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.user-info h2 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.user-info p {
+  margin-bottom: 5px;
+}
+
+.message-form {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.message-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.message-form input[type="submit"],
+.message-form button[type="submit"] {
+  margin-top: 10px;
+}
+```
+

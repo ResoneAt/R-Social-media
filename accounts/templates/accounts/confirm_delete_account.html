@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block main-content %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <h4>Are you sure about delete your account?</h4>
+        <input class="btn btn-danger" type="submit" value="Yes, delete">
+        <a href="{% url 'accounts:user_profile' request.user.id %}" class="btn btn-warning">No, cancel</a>
+    </form>
+
+{% endblock main-content %}
