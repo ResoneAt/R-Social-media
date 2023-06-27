@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import ImagePostModel, PostModel
+from .models import ImagePostModel, PostModel, LikeModel
 from django.views.generic import View
-from .forms import CreatePostForm, ImagePostForm
+from .forms import CreatePostForm, ImagePostForm, CommentForm
 from django.forms import inlineformset_factory, BaseInlineFormSet
 from django.utils.text import slugify
 from django.contrib import messages
@@ -95,23 +95,57 @@ class DeletePostView(View):
 
 class DetailPostView(View):
     template_name = 'posts/detail_post.html'
+    form_class = CommentForm
 
     def get(self, request, *args, **kwargs):
         post = get_object_or_404(PostModel, slug=kwargs['slug'])
         comments = post.get_comments_list()
         images = post.post_images()
         movies = post.post_movies()
-        context = {'post': post, 'comments': comments, 'images': images, 'movies': movies}
+        form = self.form_class()
+        check_like = LikeModel.objects.filter(post=post, user=request.user)
+        context = {'post': post,
+                   'comments': comments,
+                   'images': images,
+                   'movies': movies,
+                   'check_like': check_like,
+                   'form': form}
         return render(request, self.template_name, context)
 
+    def post(self, request, **kwargs):
+        form = self.form_class(request.POST)
+        post = get_object_or_404(PostModel, slug=kwargs['slug'])
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.author = request.user
+            new_comment.post = post
+            new_comment.save()
+            messages.success(request, 'your comment send success', 'success')
+            return redirect('posts:detail_post', post.slug)
+        messages.error(request, 'your comment is wrong! try again.', 'danger')
+        return redirect('posts:detail_post',post.slug)
 
 
 class LikePostView(View):
-    ...
+    def get(self, request, post_id):
+        posts = PostModel.objects.get(id=post_id)
+        check_like = LikeModel.objects.filter(post=posts, user=request.user)
+        if not check_like.exists():
+            LikeModel(post=posts, user=request.user).save()
+        else:
+            messages.error(request, 'you can just like this post once')
+        return redirect('posts:detail_post', posts.slug)
 
 
 class DislikePostView(View):
-    ...
+    def get(self, request, post_id):
+        post = PostModel.objects.get(id=post_id)
+        check_like = LikeModel.objects.filter(post=post, user=request.user)
+        if check_like.exists():
+            check_like.delete()
+        else:
+            messages.error(request, 'you can dislike this post! first you like this!')
+        return redirect('posts:detail_post', post.slug)
 
 
 class SentCommentView(View):

@@ -1,5 +1,5 @@
 from django import forms
-from .models import PostModel, ImagePostModel
+from .models import PostModel, ImagePostModel, CommentModel
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 
 
@@ -25,6 +25,11 @@ class ImagePostForm(forms.ModelForm):
         }
 
 
-ImageFormSet = inlineformset_factory(PostModel, ImagePostModel, form=ImagePostForm,
-                                         formset=BaseInlineFormSet, extra=3, max_num=10,
-                                         validate_max=True, can_delete=True)
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = CommentModel
+        fields = ['body']
+        widgets = {
+            'body': forms.Textarea(attrs={'class': 'form-control form-control-sm ', 'rows': 1,
+                                          'style': 'margin:16px; width:80%;'})
+        }

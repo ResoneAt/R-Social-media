@@ -5,10 +5,10 @@
         <a href="{% url 'accounts:user_profile' post.user.id %}" style="text-decoration:none; font-size:20px; background-color:lavender;" class="card-body">{{ post.user }}</a>
         <p class="card-body">{{ post.body }}</p>
         <small class="card-body" style="margin-top:-30px; color:#C0C0C0; font-size:12px;">{{ post.updated_time|date:"D j M o" }}</small>
-        {% if not is_like %}
-            <a class="btn btn-outline-primary btn-sm col-md-1" href="{% url 'accounts:like_post' post.id %}">{{ like }} Like</a>
+        {% if not check_like %}
+            <a class="btn btn-outline-primary btn-sm col-md-1" href="{% url 'posts:like_post' post.id %}">{{ post.like_count }} Like</a>
         {% else %}
-            <a class="btn btn-outline-secondary btn-sm col-md-1" href="{% url 'accounts:dislike_post' post.id %}">{{ like }} Like</a>
+            <a class="btn btn-outline-secondary btn-sm col-md-1" href="{% url 'posts:dislike_post' post.id %}">{{ post.like_count }} DisLike</a>
         {% endif %}
 
         <div class="card" style="background-color:DimGrey;">
@@ -33,7 +33,7 @@
     </div>
 
     {% if request.user.id == post.user.id %}
-        <a style="float:right;" href="{% url 'accounts:delete_post' post.id %}" class="btn btn-danger">Delete</a>
-        <a style="float:right;" href="{% url 'accounts:edit_post' post.id %}" class="btn btn-info">Update</a>
+        <a style="float:right;" href="{% url 'posts:delete_post' post.id %}" class="btn btn-danger">Delete</a>
+        <a style="float:right;" href="{% url 'posts:edit_post' post.id %}" class="btn btn-info">Update</a>
     {% endif %}
 {% endblock %}
