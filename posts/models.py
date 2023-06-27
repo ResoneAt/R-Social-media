@@ -12,6 +12,7 @@ class PostModel(BaseModel):
                                 help_text='You can write the location of this post')
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+    slug = models.SlugField(default='0-0')
 
     class Meta:
         verbose_name, verbose_name_plural = _("Post"), _("Posts")
@@ -48,7 +49,7 @@ class PostModel(BaseModel):
         kwargs = {
             'slug': self.slug
         }
-        return reverse('post_detail', kwargs=kwargs)
+        return reverse('posts:detail_post', kwargs=kwargs)
 
 
 class ImagePostModel(BaseModel):
