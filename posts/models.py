@@ -46,9 +46,7 @@ class PostModel(BaseModel):
         self.save()
 
     def get_absolute_url(self):
-        kwargs = {
-            'slug': self.slug
-        }
+        kwargs = {'slug': self.slug}
         return reverse('posts:detail_post', kwargs=kwargs)
 
 
