@@ -155,6 +155,15 @@ class User(AbstractBaseUser):
         if self.account_type == 'privet':
             self.account_type = 'public'
 
+    def new_message_count2(self, sender_id):
+        sender = get_object_or_404(User, pk=sender_id)
+        new_messages = MessageModel.objects.filter(is_read=False, from_user=sender, to_user=self)
+        return new_messages.count()
+
+    def all_of_new_messages_count(self):
+        new_messages = MessageModel.objects.filter(is_read=False, to_user=self)
+        return new_messages.count()
+
     def get_absolute_url(self):
         kwargs = {
             'user_id': self.pk
@@ -222,6 +231,15 @@ class MessageModel(BaseModel):
 
     def __str__(self):
         return f'{self.from_user.username} to {self.to_user.username} - {self.message[:20]}...'
+
+    @staticmethod
+    def seen_message(from_user_id, to_user_id):
+        from_user = get_object_or_404(User, pk=from_user_id)
+        to_user = get_object_or_404(User, pk=to_user_id)
+        messages = MessageModel.objects.filter(is_read=False,
+                                               from_user=from_user,
+                                               to_user=to_user)
+        messages.update(is_read=True)
 
 
 class NotificationModel(BaseModel):
