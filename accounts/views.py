@@ -264,9 +264,3 @@ class MessagesListView(View):
         return render(request, 'accounts/chat_list.html', context)
 
 
-# def mark_messages_as_read(request, user_id):
-#     user = get_object_or_404(User, pk=user_id)
-#     MessageModel.objects.filter(from_user=user, to_user=request.user, is_read=False).update(is_read=True)
-#     return JsonResponse({'success': True})
-
-
