@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load socialaccount %}
 <html lang="en" dir="ltr">
    <head>
       <meta charset="utf-8">
@@ -33,11 +34,11 @@
                Or login with
             </div>
             <div class="links">
-               <div class="facebook">
-                  <i class="fab fa-facebook-f"><span>Facebook</span></i>
+               <div class="facebook" style="background:black; border:black;">
+                  <i class="fab fa-github"><span>Github</span></i>
                </div>
                <div class="instagram">
-                  <i class="fab fa-google"><span>Google</span></i>
+                  <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"><span>Google</span></i></a>
                </div>
             </div>
             <div class="signup">

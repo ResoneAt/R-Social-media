@@ -38,7 +38,11 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'accounts.apps.AccountsConfig',
     'posts.apps.PostsConfig',
-    'debug_toolbar'
+    'debug_toolbar',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google'
 ]
 
 MIDDLEWARE = [
@@ -65,10 +69,37 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '823712811201-d4qg801diasc76s6sbffnf4br13ufn73.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    },
+    'facebook': {
+        'APP': {
+            'client_id': 'your_client_id',
+            'secret': 'your_secret_key',
+        }
+    }
+}
+
+SITE_ID = 2
+LOGIN_REDIRECT_URL = '/'
+
+# Additional configuration settings
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET= True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+
 
 INTERNAL_IPS = [
     # ...
@@ -142,4 +173,5 @@ LOGOUT_REDIRECT_URL = 'accounts:login'
 AUTHENTICATION_BACKENDS = [
     'accounts.authenticate.UsernameBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
