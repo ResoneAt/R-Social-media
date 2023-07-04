@@ -26,6 +26,7 @@
 
                     <h4 class="mb-0">{{ user.username }}</h4>
                     <span class="text-muted d-block mb-2">Los Angles</span>
+                    <a href="{% url 'accounts:delete_account' request.user.id %}"><button class="btn btn-primary btn-sm follow">delete account</button></a>
                     <button class="btn btn-primary btn-sm follow">Follow</button>
                     <button class="btn btn-primary btn-sm Unfollow">Unfollow</button>
                     <button class="btn btn-primary btn-sm Pending">Pending accept</button>

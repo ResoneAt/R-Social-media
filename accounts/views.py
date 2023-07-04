@@ -97,7 +97,7 @@ class EditProfileView(View):
             return render(request, self.template_name, {'form': form})
         return redirect('home:home')
 
-    def post(self, request, user_id):
+    def post(self, request):
         form = self.form_class(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
@@ -115,9 +115,7 @@ class DeleteAccountView(View):
 
     def post(self, request, user_id):
         if request.user.id == user_id:
-            user = request.user
-            user.is_active = False
-            user.save()
+            request.user.delete()
             return redirect('accounts:login')
         return render(request, self.template_name)
 
