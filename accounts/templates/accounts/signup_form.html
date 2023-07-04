@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load socialaccount %}
 <html lang="en" dir="ltr">
    <head>
       <meta charset="utf-8">
@@ -57,9 +58,10 @@
                <div class="facebook">
                   <i class="fab fa-facebook-f"><span>Facebook</span></i>
                </div>
-               <div class="instagram">
-                  <i class="fab fa-google"><span>Google</span></i>
-               </div>
+                  <div class="instagram">
+                     <i class="fab fa-google"><a href="{% provider_login_url 'google' %}"><span>Google</span></a></i>
+                  </div>
+
             </div>
             <div class="signup">
                Do you have an account?
