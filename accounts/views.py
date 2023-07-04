@@ -5,6 +5,7 @@ from .forms import SignupUserForm, LoginUserForm, EditProfileForm,ReportUserForm
 from .authenticate import UsernameBackend
 from .models import User, MessageModel
 from django.contrib.auth import login, logout, authenticate
+from django.db.models import Q
 from django.http import JsonResponse
 
 
@@ -96,7 +97,7 @@ class EditProfileView(View):
             return render(request, self.template_name, {'form': form})
         return redirect('home:home')
 
-    def post(self, request, user_id):
+    def post(self, request):
         form = self.form_class(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
@@ -114,9 +115,7 @@ class DeleteAccountView(View):
 
     def post(self, request, user_id):
         if request.user.id == user_id:
-            user = request.user
-            user.is_active = False
-            user.save()
+            request.user.delete()
             return redirect('accounts:login')
         return render(request, self.template_name)
 
@@ -242,6 +241,7 @@ class SentMessagesView(View):
             'user': user,
             'messages_list': messages_list,
         }
+        MessageModel.seen_message(user_id, request.user.id)
         return render(request, self.template_name, context)
 
     def post(self, request, user_id):
@@ -257,16 +257,12 @@ class SentMessagesView(View):
 
 class MessagesListView(View):
     def get(self, request):
-        users = User.objects.filter(receiver__from_user=request.user).distinct()
+        users = User.objects.filter(
+            Q(sender__to_user=request.user) | Q(receiver__from_user=request.user)
+        ).distinct()
         context = {
             'users': users
         }
         return render(request, 'accounts/chat_list.html', context)
-
-
-# def mark_messages_as_read(request, user_id):
-#     user = get_object_or_404(User, pk=user_id)
-#     MessageModel.objects.filter(from_user=user, to_user=request.user, is_read=False).update(is_read=True)
-#     return JsonResponse({'success': True})
 
 

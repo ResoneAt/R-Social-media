@@ -34,7 +34,7 @@ class UserCreationForm(forms.ModelForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
+            raise ValidationError("Passwords don't match")
         return password2
 
     def save(self, commit=True):
@@ -71,7 +71,7 @@ class SignupUserForm(forms.Form):
         cd = super().clean()
         p1 = cd.get('password1')
         p2 = cd.get('password2')
-        if p1 and p2 and p1 != p2 :
+        if p1 and p2 and p1 != p2:
             raise ValidationError('Passwords must match!')
 
     def clean_email(self):

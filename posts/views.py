@@ -148,10 +148,6 @@ class DislikePostView(View):
         return redirect('posts:detail_post', post.slug)
 
 
-class SentCommentView(View):
-    ...
-
-
 class EditCommentView(View):
     ...
 

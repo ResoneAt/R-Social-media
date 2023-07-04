@@ -5,6 +5,9 @@ from core.models import BaseModel
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from django.db.models.manager import Manager
+
 
 class User(AbstractBaseUser):
     username = models.CharField(max_length=73, unique=True, help_text='Please enter your username')
@@ -33,6 +36,9 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
+    deleted_at = models.DateField(blank=True, null=True, editable=False)
+    is_deleted = models.BooleanField(blank=True, null=True, default=False)
+
     objects = MyUserManager()
 
     USERNAME_FIELD = "email"
@@ -47,6 +53,12 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_active = False
+        self.is_deleted = True
+        self.deleted_at = timezone.now()
+        self.save()
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
@@ -134,10 +146,6 @@ class User(AbstractBaseUser):
     def get_follow_request_list(self):
         return FollowRequestModel.objects.filter(to_user=self)
 
-    def delete(self, using=None, keep_parents=False):
-        self.is_active = False
-        self.save()
-
     def profile_images(self):
         return ImageUserModel.objects.filter(user=self)
 
@@ -155,11 +163,27 @@ class User(AbstractBaseUser):
         if self.account_type == 'privet':
             self.account_type = 'public'
 
+    def new_message_count2(self, sender_id):
+        sender = get_object_or_404(User, pk=sender_id)
+        new_messages = MessageModel.objects.filter(is_read=False, from_user=sender, to_user=self)
+        return new_messages.count()
+
+    def all_of_new_messages_count(self):
+        new_messages = MessageModel.objects.filter(is_read=False, to_user=self)
+        return new_messages.count()
+
     def get_absolute_url(self):
         kwargs = {
             'user_id': self.pk
         }
         return reverse('accounts:user_profile', kwargs=kwargs)
+
+
+class RecycleUser(User):
+
+    deleted = Manager()
+    class Meta:
+        proxy = True
 
 
 class RelationModel(BaseModel):
@@ -222,6 +246,15 @@ class MessageModel(BaseModel):
 
     def __str__(self):
         return f'{self.from_user.username} to {self.to_user.username} - {self.message[:20]}...'
+
+    @staticmethod
+    def seen_message(from_user_id, to_user_id):
+        from_user = get_object_or_404(User, pk=from_user_id)
+        to_user = get_object_or_404(User, pk=to_user_id)
+        messages = MessageModel.objects.filter(is_read=False,
+                                               from_user=from_user,
+                                               to_user=to_user)
+        messages.update(is_read=True)
 
 
 class NotificationModel(BaseModel):
