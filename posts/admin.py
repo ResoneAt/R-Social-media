@@ -17,6 +17,7 @@ class CommentInline(admin.TabularInline):
 
 class PostAdmin(admin.ModelAdmin):
     inlines = [PostImageInline, PostMovieInline, CommentInline]
+    prepopulated_fields = {'slug': ('body',)}
 
 
 admin.site.register(PostModel, PostAdmin)
