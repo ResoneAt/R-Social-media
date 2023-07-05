@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class PostModel(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     body = models.TextField(help_text='Please write caption')
     location = models.CharField(max_length=730, blank=True, null=True,
                                 help_text='You can write the location of this post')
