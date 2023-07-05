@@ -7,6 +7,7 @@ from .models import User, MessageModel
 from django.contrib.auth import login, logout, authenticate
 from django.db.models import Q
 from django.http import JsonResponse
+from posts.models import PostModel
 
 
 class SignupView(View):
@@ -147,7 +148,7 @@ class FollowerListView(View):
     template_name = 'accounts/follower_list.html'
 
     def get(self, request, user_id):
-        if User.is_following(request.user, user_id):
+        if User.is_following(request.user, user_id) or request.user.id == user_id:
             follower = User.get_follower_list(user_id)
             return render(request, self.template_name, {'follower': follower})
         return redirect('accounts:user_profile', user_id)
@@ -157,7 +158,7 @@ class FollowingListView(View):
     template_name = 'accounts/following_list.html'
 
     def get(self, request, user_id):
-        if User.is_following(request.user, user_id):
+        if User.is_following(request.user, user_id) or request.user.id == user_id:
             following = User.get_following_list(user_id)
             return render(request, self.template_name, {'following': following})
         return redirect('accounts:user_profile', user_id)

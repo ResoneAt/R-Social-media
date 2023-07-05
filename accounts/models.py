@@ -86,55 +86,59 @@ class User(AbstractBaseUser):
         return self.request_receive.count()
 
     def is_following(self, user_id):
-        user = self.user_instance(pk=user_id)
+        user = User.objects.get(pk=user_id)
         return self.follower.filter(to_user=user).exists()
 
     def is_follow_requesting(self, user_id):
-        user = self.user_instance(pk=user_id)
+        user = User.objects.get(pk=user_id)
         return self.request_sent.filter(to_user=user).exists()
 
     def is_followed_by(self, user_id):
-        user = self.user_instance(pk=user_id)
+        user = User.objects.get(pk=user_id)
         return self.following.filter(from_user=user).exists()
 
     def follow(self, user_id):
-        user = self.user_instance(pk=user_id)
+        user = User.objects.get(pk=user_id)
         relation = RelationModel(from_user=self, to_user=user)
         relation.save()
 
     def unfollow(self, user_id):
-        user = self.user_instance(pk=user_id)
+        user = User.objects.get(pk=user_id)
         relation = RelationModel.objects.get(from_user=self, to_user=user)
         relation.delete()
 
     def follow_request(self, user_id):
-        user = self.user_instance(pk=user_id)
+        user = User.objects.get(pk=user_id)
         request = FollowRequestModel(from_user=self, to_user=user)
         request.save()
 
     def accept_follow_request(self, user_id):
-        user = self.user_instance(pk=user_id)
+        user = User.objects.get(pk=user_id)
         request = FollowRequestModel.objects.get(from_user=user, to_user=self)
         request.delete()
         User.follow(user, self.pk)
 
     def reject_follow_request(self, user_id):
-        user = self.user_instance(pk=user_id)
+        user = User.objects.get(pk=user_id)
         request = FollowRequestModel.objects.get(from_user=user, to_user=self)
         request.delete()
 
-    def is_privet(self,user_id):
-        user = self.user_instance(pk=user_id)
+
+    @staticmethod
+    def is_privet(user_id):
+        user = User.objects.get(pk=user_id)
         return user.account_type == 'privet'
 
-    def get_follower_list(self, user_id):
-        user = self.user_instance(pk=user_id)
-        return User.objects.filter(following__to_user=user)
+
+    @staticmethod
+    def get_follower_list(user_id):
+        user = User.objects.get(pk=user_id)
+        return User.objects.filter(follower__to_user=user)
 
     @staticmethod
     def get_following_list(user_id):
         user = User.objects.get(pk=user_id)
-        return User.objects.filter(follower__from_user=user)
+        return User.objects.filter(following__from_user=user)
 
     def get_requests_list(self):
         return FollowRequestModel.objects.filter(to_user=self)
@@ -167,6 +171,9 @@ class User(AbstractBaseUser):
     def all_of_new_messages_count(self):
         new_messages = MessageModel.objects.filter(is_read=False, to_user=self)
         return new_messages.count()
+
+    def get_posts(self):
+        return self.posts.all()
 
     def get_absolute_url(self):
         kwargs = {

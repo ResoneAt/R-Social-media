@@ -1,1 +1,6 @@
-follower list
+{% extends 'base.html' %}
+{% block main-content %}
+    {% for follower in follower %}
+        <p>{{ follower }}</p>
+    {% endfor %}
+{% endblock %}

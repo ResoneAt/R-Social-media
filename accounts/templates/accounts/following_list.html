@@ -1,1 +1,6 @@
-following list
+{% extends 'base.html' %}
+{% block main-content %}
+    {% for following in following %}
+        <p>{{ following }}</p>
+    {% endfor %}
+{% endblock %}
