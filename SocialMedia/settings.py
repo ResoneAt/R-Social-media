@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google'
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
 ]
 
 MIDDLEWARE = [
@@ -83,15 +84,16 @@ SOCIALACCOUNT_PROVIDERS = {
             'key': ''
         }
     },
-    'facebook': {
+    'github': {
         'APP': {
-            'client_id': 'your_client_id',
-            'secret': 'your_secret_key',
+            'client_id': 'd09ede4cd2754de190b4',
+            'secret': '20147b5a29b226457e447824e79563a8fda61e5a',
+            'key': ''
         }
     }
 }
 
-SITE_ID = 2
+SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
 # Additional configuration settings

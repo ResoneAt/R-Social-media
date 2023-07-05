@@ -30,7 +30,7 @@
                     <button class="btn btn-primary btn-sm follow">Follow</button>
                     <button class="btn btn-primary btn-sm Unfollow">Unfollow</button>
                     <button class="btn btn-primary btn-sm Pending">Pending accept</button>
-                    <button class="btn btn-primary btn-sm Edit">Edit profile</button>
+                    <a href="{% url 'accounts:edit_profile' request.user.id %}"><button class="btn btn-primary btn-sm Edit">Edit profile</button></a>
                     <button class="btn btn-primary btn-sm Save_messages">Save messages</button>
 
                     <div class="d-flex justify-content-between align-items-center mt-4 px-4">
