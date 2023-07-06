@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from .models import RelationModel, FollowRequestModel, ImageUserModel, ReportUserModel, MessageModel, NotificationModel
+from .models import RelationModel, FollowRequestModel, ReportUserModel, MessageModel, NotificationModel
 
 
 class UserModelTest(TestCase):
@@ -50,16 +50,16 @@ class UserModelTest(TestCase):
         self.assertEqual(self.user.get_following_count(), 0)
         self.assertEqual(self.user.get_follower_count(), 1)
 
-    def test_user_image(self):
-        image = ImageUserModel.objects.create(
-            image='test.jpg',
-            user=self.user,
-            alt='Test Image'
-        )
-
-        self.assertEqual(str(image), 'Test Image - user : testuser')
-        self.assertEqual(self.user.profile_images().count(), 1)
-        self.assertEqual(self.user.main_profile_image(), image)
+    # def test_user_image(self):
+    #     image = ImageUserModel.objects.create(
+    #         image='test.jpg',
+    #         user=self.user,
+    #         alt='Test Image'
+    #     )
+    #
+    #     self.assertEqual(str(image), 'Test Image - user : testuser')
+    #     self.assertEqual(self.user.profile_images().count(), 1)
+    #     self.assertEqual(self.user.main_profile_image(), image)
 
     def test_user_report(self):
         user2 = get_user_model().objects.create_user(
@@ -135,26 +135,26 @@ class FollowRequestModelTest(TestCase):
         self.assertEqual(self.user2.request_receive.count(), 1)
 
 
-class ImageUserModelTest(TestCase):
-    def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username='testuser',
-            email='test@example.com',
-            password='testpass'
-        )
-        self.image = ImageUserModel.objects.create(
-            image='test.jpg',
-            user=self.user,
-            alt='Test Image'
-        )
-
-    def test_image_creation(self):
-        self.assertEqual(str(self.image), 'Test Image - user : testuser')
-        self.assertEqual(self.image.user, self.user)
-
-    def test_image_user_relationship(self):
-        self.assertEqual(self.user.profile_images().count(), 1)
-        self.assertEqual(self.user.main_profile_image(), self.image)
+# class ImageUserModelTest(TestCase):
+#     def setUp(self):
+#         self.user = get_user_model().objects.create_user(
+#             username='testuser',
+#             email='test@example.com',
+#             password='testpass'
+#         )
+#         self.image = ImageUserModel.objects.create(
+#             image='test.jpg',
+#             user=self.user,
+#             alt='Test Image'
+#         )
+#
+#     def test_image_creation(self):
+#         self.assertEqual(str(self.image), 'Test Image - user : testuser')
+#         self.assertEqual(self.image.user, self.user)
+#
+#     def test_image_user_relationship(self):
+#         self.assertEqual(self.user.profile_images().count(), 1)
+#         self.assertEqual(self.user.main_profile_image(), self.image)
 
 
 class ReportUserModelTest(TestCase):

@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 class PostModel(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     body = models.TextField(help_text='Please write caption')
+    image = models.ImageField(upload_to='posts',blank=True, null=True, help_text='Please upload your image')
     location = models.CharField(max_length=730, blank=True, null=True,
                                 help_text='You can write the location of this post')
     updated_at = models.DateTimeField(auto_now=True)
@@ -32,8 +33,8 @@ class PostModel(BaseModel):
     def get_liker_list(self):
         return User.objects.filter(liker__post=self)
 
-    def post_images(self):
-        return ImagePostModel.objects.filter(post=self)
+    # def post_images(self):
+    #     return ImagePostModel.objects.filter(post=self)
 
     def post_movies(self):
         return MoviePostModel.objects.filter(post=self)
@@ -48,18 +49,6 @@ class PostModel(BaseModel):
     def get_absolute_url(self):
         kwargs = {'slug': self.slug}
         return reverse('posts:detail_post', kwargs=kwargs)
-
-
-class ImagePostModel(BaseModel):
-    image = models.ImageField(upload_to='posts', help_text='Please upload your image')
-    post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='image')
-    alt = models.CharField(max_length=73, help_text='please write alt for image.')
-
-    class Meta:
-        verbose_name, verbose_name_plural = _("Image"), _("Images")
-
-    def __str__(self):
-        return self.alt
 
 
 class MoviePostModel(BaseModel):

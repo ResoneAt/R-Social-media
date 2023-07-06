@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from .models import PostModel, CommentModel, LikeModel, ImagePostModel, ReportPostModel, MoviePostModel
+from .models import PostModel, CommentModel, LikeModel, ReportPostModel, MoviePostModel
 
 
 class PostModelTest(TestCase):
@@ -26,11 +26,11 @@ class PostModelTest(TestCase):
             user=self.user,
             post=self.post
         )
-        self.image = ImagePostModel.objects.create(
-            image='test_image.jpg',
-            post=self.post,
-            alt='Test image'
-        )
+        # self.image = ImagePostModel.objects.create(
+        #     image='test_image.jpg',
+        #     post=self.post,
+        #     alt='Test image'
+        # )
         self.movie = MoviePostModel.objects.create(
             movie='test_movie.mp4',
             post=self.post
@@ -64,12 +64,12 @@ class PostModelTest(TestCase):
         self.assertEqual(like.post, self.post)
         self.assertEqual(str(like), 'test-post-testuser')
 
-    def test_image_post_model(self):
-        image = ImagePostModel.objects.get(id=1)
-        self.assertEqual(image.image, 'test_image.jpg')
-        self.assertEqual(image.post, self.post)
-        self.assertEqual(image.alt, 'Test image')
-        self.assertEqual(str(image), 'Test image')
+    # def test_image_post_model(self):
+    #     image = ImagePostModel.objects.get(id=1)
+    #     self.assertEqual(image.image, 'test_image.jpg')
+    #     self.assertEqual(image.post, self.post)
+    #     self.assertEqual(image.alt, 'Test image')
+    #     self.assertEqual(str(image), 'Test image')
 
     def test_movie_post_model(self):
         movie = MoviePostModel.objects.get(id=1)
