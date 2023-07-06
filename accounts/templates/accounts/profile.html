@@ -2,92 +2,71 @@
 
 {% block main-content %}
     <div class="container d-flex justify-content-center align-items-center">
-
-                 <div class="card">
-
-                  <div class="upper">
-
-                    <img src="https://i.imgur.com/Qtrsrk5.jpg" class="img-fluid">
-
-                  </div>
-
-                  <div class="user text-center">
-
-                    <div class="profile">
-
-                      <img src="https://i.imgur.com/JgYD2nQ.jpg" class="rounded-circle" width="80">
-
-                    </div>
-
-                  </div>
-
-
-                  <div class="mt-5 text-center">
-
-                    <h4 class="mb-0">{{ user.username }}</h4>
-                    <span class="text-muted d-block mb-2">Los Angles</span>
-                    <a href="{% url 'accounts:delete_account' request.user.id %}"><button class="btn btn-primary btn-sm follow">delete account</button></a>
-                    <a href="{% url 'accounts:follow' user.id %}"><button class="btn btn-primary btn-sm follow">Follow</button></a>
-                    <button class="btn btn-primary btn-sm Unfollow">Unfollow</button>
-                    <button class="btn btn-primary btn-sm Pending">Pending accept</button>
-                    <a href="{% url 'accounts:edit_profile' request.user.id %}"><button class="btn btn-primary btn-sm Edit">Edit profile</button></a>
-                    <button class="btn btn-primary btn-sm Save_messages">Save messages</button>
-                    <a href="{% url 'accounts:follow_request' user.id %}"><button class="btn btn-primary btn-sm Save_messages">follow request</button></a>
-                    <a href="{% url 'posts:create_post' %}"><button class="btn btn-primary btn-sm Save_messages">create post</button></a>
-
-                    <div class="d-flex justify-content-between align-items-center mt-4 px-4">
-
-                     <a href="{% url 'accounts:follower_list' user.id %}">
-                      <div class="stats">
-                        <h6 class="mb-0">Followers</h6>
-                        <span>{{ user.get_follower_count }}</span>
-                      </div>
-                     </a>
-
-                     <a href="{% url 'accounts:following_list' user.id %}">
-                      <div class="stats">
-                        <h6 class="mb-0">Followings</h6>
-                        <span>{{ user.get_following_count }}</span>
-                      </div>
-                     </a>
-
-                      <div class="stats">
+        <div class="card">
+            <div class="upper">
+                <img src="https://i.imgur.com/Qtrsrk5.jpg" class="img-fluid">
+            </div>
+            <div class="user text-center">
+                <div class="profile">
+                    <img src="{{ user.image.url }}" class="rounded-circle" width="80" style="height:80px; width:80px;">
+                </div>
+            </div>
+            <div class="mt-5 text-center">
+                <h4 class="mb-0">{{ user.username }}</h4>
+                <span class="text-muted d-block mb-2">Los Angles</span>
+                <a href="{% url 'accounts:delete_account' request.user.id %}">
+                    <button class="btn btn-primary btn-sm follow">delete account</button>
+                </a>
+                <a href="{% url 'accounts:follow' user.id %}">
+                    <button class="btn btn-primary btn-sm follow">Follow</button>
+                </a>
+                <button class="btn btn-primary btn-sm Unfollow">Unfollow</button>
+                <button class="btn btn-primary btn-sm Pending">Pending accept</button>
+                <a href="{% url 'accounts:edit_profile' request.user.id %}">
+                    <button class="btn btn-primary btn-sm Edit">Edit profile</button>
+                </a>
+                <button class="btn btn-primary btn-sm Save_messages">Save messages</button>
+                <a href="{% url 'accounts:follow_request' user.id %}">
+                    <button class="btn btn-primary btn-sm Save_messages">follow request</button>
+                </a>
+                <a href="{% url 'posts:create_post' %}">
+                    <button class="btn btn-primary btn-sm Save_messages">create post</button>
+                </a>
+                <div class="d-flex justify-content-between align-items-center mt-4 px-4">
+                    <a href="{% url 'accounts:follower_list' user.id %}">
+                        <div class="stats">
+                            <h6 class="mb-0">Followers</h6>
+                            <span>{{ user.get_follower_count }}</span>
+                        </div>
+                    </a>
+                    <a href="{% url 'accounts:following_list' user.id %}">
+                        <div class="stats">
+                            <h6 class="mb-0">Followings</h6>
+                            <span>{{ user.get_following_count }}</span>
+                        </div>
+                    </a>
+                    <div class="stats">
                         <h6 class="mb-0">Posts</h6>
                         <span>{{ user.get_posts_count }}</span>
-                      </div>
-
-
                     </div>
-
-                  </div>
-
-                 </div>
-        <div class="card">
-                    {% if posts %}
-                {% for post in posts %}
-            <div class="card" style="margin:16px;">
-                    <a href="{% url 'accounts:user_profile' post.user.id %}" style="text-decoration:none; font-size:20px; background-color:lavender;" class="card-body">{{ post.user }}</a>
-                    <a href="{{ post.get_absolute_url }}" class="card-body">{{ post.body|truncatewords:5 }}</a>
-                    <small class="card-body" style="margin-top:-30px; color:#C0C0C0; font-size:12px; ">{{ post.created_at|date:"D j M o" }}</small>
+                </div>
             </div>
-                {% empty %}
-                    <p>list is empty...</p>
-                {% endfor %}
-        {% endif %}
         </div>
-        <div class="card">
-                    {% if user.get_posts %}
+        {% if user.get_posts %}
+            <div class="card">
                 {% for post in user.get_posts %}
-            <div class="card" style="margin:16px;">
-                    <a href="{% url 'accounts:user_profile' post.user.id %}" style="text-decoration:none; font-size:20px; background-color:lavender;" class="card-body">{{ post.user }}</a>
-                    <a href="{{ post.get_absolute_url }}" class="card-body">{{ post.body|truncatewords:5 }}</a>
-                    <small class="card-body" style="margin-top:-30px; color:#C0C0C0; font-size:12px; ">{{ post.created_at|date:"D j M o" }}</small>
-            </div>
+                    <div class="card" style="margin:16px;">
+                        <a href="{% url 'accounts:user_profile' post.user.id %}" style="text-decoration:none; font-size:20px; background-color:lavender;" class="card-body">{{ post.user }}</a>
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" style="height:100px; width:auto;">
+                        {% endif %}
+                        <a href="{{ post.get_absolute_url }}" class="card-body">{{ post.body|truncatewords:5 }}</a>
+                        <small class="card-body" style="margin-top:-30px; color:#C0C0C0; font-size:12px; ">{{ post.created_at|date:"D j M o" }}</small>
+                    </div>
                 {% empty %}
                     <p>list is empty...</p>
                 {% endfor %}
+            </div>
         {% endif %}
-        </div>
-
     </div>
 {% endblock main-content %}

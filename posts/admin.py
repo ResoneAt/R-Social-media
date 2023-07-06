@@ -1,10 +1,6 @@
 from django.contrib import admin
-from .models import PostModel, MoviePostModel,ImagePostModel,ReportPostModel,CommentModel,LikeModel
+from .models import PostModel, MoviePostModel,ReportPostModel,CommentModel,LikeModel
 # Register your models here.
-
-
-class PostImageInline(admin.TabularInline):
-    model = ImagePostModel
 
 
 class PostMovieInline(admin.TabularInline):
@@ -16,7 +12,7 @@ class CommentInline(admin.TabularInline):
 
 
 class PostAdmin(admin.ModelAdmin):
-    inlines = [PostImageInline, PostMovieInline, CommentInline]
+    inlines = [PostMovieInline, CommentInline]
     prepopulated_fields = {'slug': ('body',)}
 
 

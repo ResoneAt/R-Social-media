@@ -97,7 +97,7 @@ class LoginUserForm(forms.Form):
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email',
+        fields = ['username', 'email', 'image',
                   'first_name', 'last_name', 'date_of_birth',
                   'bio', 'gender', 'account_type', 'phone_number',
                   ]

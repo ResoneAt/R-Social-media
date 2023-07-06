@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User,ImageUserModel,NotificationModel,ReportUserModel,\
+from .models import User,NotificationModel,ReportUserModel,\
     FollowRequestModel,MessageModel,RelationModel,RecycleUser
 from .forms import UserCreationForm, UserChangeForm
 
 
-class UserImageInline(admin.TabularInline):
-    model = ImageUserModel
+# class UserImageInline(admin.TabularInline):
+#     model = ImageUserModel
 
 
 class UserAdmin(BaseUserAdmin):
@@ -22,8 +22,8 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ["is_admin"]
     fieldsets = [
         (None, {"fields": ["username", "email", "password"]}),
-        ("Personal info", {"fields": ["first_name","last_name", "bio", "gender", "phone_number" ,
-                                      'account_type', "date_of_birth",]}),
+        ("Personal info", {"fields": ["first_name","last_name","image", "bio", "gender", "phone_number" ,
+                                      'account_type', "date_of_birth"]}),
         ("Permissions", {"fields": ["is_admin", "is_active", "is_deleted"]}),
     ]
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -40,7 +40,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ["email"]
     ordering = ["email"]
     filter_horizontal = []
-    inlines = [UserImageInline]
+    # inlines = [UserImageInline]
 
 
 @admin.register(RecycleUser)

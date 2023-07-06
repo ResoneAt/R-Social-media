@@ -102,8 +102,8 @@ class EditProfileView(LoginRequiredMixin, View):
         messages.error(request, 'You can not do this action!', 'danger')
         return redirect('home:home')
 
-    def post(self, request):
-        form = self.form_class(request.POST, instance=request.user)
+    def post(self, request, user_id):
+        form = self.form_class(request.POST,request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect('accounts:user_profile', request.user.id)

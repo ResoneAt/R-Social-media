@@ -19,6 +19,7 @@ class User(AbstractBaseUser):
     female = 2
     gender_choice = ((male, 'male'),(female, 'female'))
     gender = models.IntegerField(choices=gender_choice, blank=True, null=True)
+    image = models.ImageField(upload_to='users', null=True, blank=True, help_text='Please upload your image.')
 
     account_type_choices = (('public', 'Public'), ('privet', 'Privet'))
     account_type = models.CharField(max_length=10, choices=account_type_choices, default='public')
@@ -142,11 +143,11 @@ class User(AbstractBaseUser):
     def get_follow_request_list(self):
         return FollowRequestModel.objects.filter(to_user=self)
 
-    def profile_images(self):
-        return ImageUserModel.objects.filter(user=self)
+    # def profile_images(self):
+    #     return ImageUserModel.objects.filter(user=self)
 
-    def main_profile_image(self):
-        return ImageUserModel.objects.filter(user=self).latest()
+    # def main_profile_image(self):
+    #     return ImageUserModel.objects.filter(user=self).latest()
 
     def get_report_user_list(self):
         return ReportUserModel.objects.filter(user=self)
@@ -212,16 +213,16 @@ class FollowRequestModel(BaseModel):
         return f'{self.from_user.username} to {self.to_user.username} - {self.created_at}'
 
 
-class ImageUserModel(BaseModel):
-    image = models.ImageField(upload_to='users', help_text='Please upload your image.')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='image')
-    alt = models.CharField(max_length=73, help_text='please write alt for image.')
-
-    class Meta:
-        verbose_name, verbose_name_plural = _("User Image"), _("User Images")
-
-    def __str__(self):
-        return f'{self.alt} - user : {self.user.username}'
+# class ImageUserModel(BaseModel):
+#     image = models.ImageField(upload_to='users', help_text='Please upload your image.')
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='image')
+#     alt = models.CharField(max_length=73, help_text='please write alt for image.')
+#
+#     class Meta:
+#         verbose_name, verbose_name_plural = _("User Image"), _("User Images")
+#
+#     def __str__(self):
+#         return f'{self.alt} - user : {self.user.username}'
 
 
 class ReportUserModel(BaseModel):

@@ -1,28 +1,18 @@
 from django import forms
-from .models import PostModel, ImagePostModel, CommentModel
+from .models import PostModel, CommentModel
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 
 
 class CreatePostForm(forms.ModelForm):
-
     class Meta:
         model = PostModel
-        fields = ['body', 'location']
+        fields = ['image', 'body', 'location']
 
 
 class MultipleFileInput(forms.ClearableFileInput):
     def __init__(self, attrs=None):
         super().__init__(attrs)
         self.attrs['multiple'] = True
-
-
-class ImagePostForm(forms.ModelForm):
-    class Meta:
-        model = ImagePostModel
-        fields = ['image', 'alt']
-        widgets = {
-            'image': MultipleFileInput()
-        }
 
 
 class CommentForm(forms.ModelForm):
