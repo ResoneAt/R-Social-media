@@ -2,12 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.generic import View
 from .forms import SignupUserForm, LoginUserForm, EditProfileForm,ReportUserForm,MessageForm
-from .authenticate import UsernameBackend
 from .models import User, MessageModel
 from django.contrib.auth import login, logout, authenticate
 from django.db.models import Q
-from django.http import JsonResponse
-from posts.models import PostModel
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class SignupView(View):
@@ -54,7 +52,7 @@ class LoginView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(request, username=cd['username'],password=cd['password'])
+            user = authenticate(request, username=cd['username'], password=cd['password'])
             if user is not None:
                 login(request, user)
                 # messages.success(request, 'You logged in successfully', 'success')
@@ -65,7 +63,7 @@ class LoginView(View):
         return render(request, self.template_name, {'login_form': form})
 
 
-class LogoutView(View):
+class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
         if request.user.is_authenticated:
             logout(request)
@@ -75,7 +73,7 @@ class LogoutView(View):
         return redirect('home:home')
 
 
-class ProfileView(View):
+class ProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = get_object_or_404(User, pk=user_id, is_active=True)
         is_following = User.is_following(request.user, user_id)
@@ -88,7 +86,7 @@ class ProfileView(View):
         return render(request, 'accounts/profile.html', context)
 
 
-class EditProfileView(View):
+class EditProfileView(LoginRequiredMixin, View):
     form_class = EditProfileForm
     template_name = 'accounts/edit_profile.html'
 
@@ -106,7 +104,7 @@ class EditProfileView(View):
         return render(request, self.template_name, {'form': form})
 
 
-class DeleteAccountView(View):
+class DeleteAccountView(LoginRequiredMixin, View):
     template_name = 'accounts/confirm_delete_account.html'
 
     def get(self, request, user_id):
@@ -121,7 +119,7 @@ class DeleteAccountView(View):
         return render(request, self.template_name)
 
 
-class FollowView(View):
+class FollowView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         if not User.is_privet(user_id):
             if not User.is_following(request.user, user_id):
@@ -134,7 +132,7 @@ class FollowView(View):
         return redirect('accounts:user_profile', user_id)
 
 
-class UnFollowView(View):
+class UnFollowView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         if User.is_following(request.user, user_id):
             User.unfollow(request.user, user_id)
@@ -144,7 +142,7 @@ class UnFollowView(View):
         return redirect('accounts:user_profile', user_id)
 
 
-class FollowerListView(View):
+class FollowerListView(LoginRequiredMixin, View):
     template_name = 'accounts/follower_list.html'
 
     def get(self, request, user_id):
@@ -154,7 +152,7 @@ class FollowerListView(View):
         return redirect('accounts:user_profile', user_id)
 
 
-class FollowingListView(View):
+class FollowingListView(LoginRequiredMixin, View):
     template_name = 'accounts/following_list.html'
 
     def get(self, request, user_id):
@@ -164,7 +162,7 @@ class FollowingListView(View):
         return redirect('accounts:user_profile', user_id)
 
 
-class SentFollowRequest(View):
+class SentFollowRequest(LoginRequiredMixin, View):
     def get(self, request, user_id):
         if User.is_privet(user_id):
             if not User.is_follow_requesting(request.user, user_id):
@@ -177,27 +175,27 @@ class SentFollowRequest(View):
         return redirect('accounts:user_profile', user_id)
 
 
-class FollowRequestList(View):
+class FollowRequestList(LoginRequiredMixin, View):
     def get(self, request):
         requests = User.get_requests_list(request.user)
         return render(request, 'accounts/request_list.html', {'requests': requests})
 
 
-class AcceptFollowRequest(View):
+class AcceptFollowRequest(LoginRequiredMixin, View):
     def get(self, request, user_id):
         User.accept_follow_request(request.user, user_id)
         messages.success(request, 'your Accept request success', 'success')
         return redirect('accounts:follow_request_list')
 
 
-class RejectFollowRequest(View):
+class RejectFollowRequest(LoginRequiredMixin, View):
     def get(self, request, user_id):
         User.reject_follow_request(request.user, user_id)
         messages.success(request, 'you are Reject request', 'success')
         return redirect('accounts:follow_request_list')
 
 
-class ReportUserView(View):
+class ReportUserView(LoginRequiredMixin, View):
     class_form = ReportUserForm
     template_name = 'accounts/report.html'
 
@@ -228,7 +226,7 @@ class ReportUserView(View):
             return render(request, self.template_name, context)
 
 
-class SentMessagesView(View):
+class SentMessagesView(LoginRequiredMixin, View):
     template_name = 'accounts/pv_messages.html'
 
     def get(self, request, user_id):
@@ -256,7 +254,7 @@ class SentMessagesView(View):
         return redirect('accounts:message', user.id)
 
 
-class MessagesListView(View):
+class MessagesListView(LoginRequiredMixin, View):
     def get(self, request):
         users = User.objects.filter(
             Q(sender__to_user=request.user) | Q(receiver__from_user=request.user)

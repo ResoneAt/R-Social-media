@@ -47,10 +47,6 @@ class User(AbstractBaseUser):
     class Meta:
         verbose_name, verbose_name_plural = _("User"), _("Users")
 
-    def setup(self, request, *args, **kwargs):
-        self.user_instance = get_object_or_404(User, pk=kwargs['user_id'])
-        return super().setup(request, *args, **kwargs)
-
     def __str__(self):
         return self.email
 
@@ -174,6 +170,9 @@ class User(AbstractBaseUser):
 
     def get_posts(self):
         return self.posts.all()
+
+    def get_posts_count(self):
+        return self.posts.count()
 
     def get_absolute_url(self):
         kwargs = {
