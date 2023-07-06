@@ -45,7 +45,7 @@ class EditPostView(View):
     ImageFormSet = inlineformset_factory(PostModel, ImagePostModel, form=ImagePostForm,
                                          formset=BaseInlineFormSet, extra=1, max_num=10,
                                          validate_max=True, can_delete=True)
-    template_name = 'posts/edit_post.html'
+    template_name = 'posts/create_post.html'
 
     def get(self, request, post_id):
         post = get_object_or_404(PostModel, id=post_id, user=request.user)
@@ -123,7 +123,7 @@ class DetailPostView(View):
             messages.success(request, 'your comment send success', 'success')
             return redirect('posts:detail_post', post.slug)
         messages.error(request, 'your comment is wrong! try again.', 'danger')
-        return redirect('posts:detail_post',post.slug)
+        return redirect('posts:detail_post', post.slug)
 
 
 class LikePostView(View):

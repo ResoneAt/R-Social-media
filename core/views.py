@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
 
-class HomePageView(View):
+class HomePageView(LoginRequiredMixin, View):
     def get(self, request):
         post = PostModel.objects.all().order_by('-created_at')
         if request.GET.get('search'):

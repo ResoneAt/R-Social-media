@@ -23,7 +23,7 @@ SECRET_KEY = 'django-insecure-^ddkhn2$rjc#1*r#%a4otzv+cg)@_0mve(m%*jtc*_v64vk*_4
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+import os
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
+    'material',
+    'material.frontend',
 ]
 
 MIDDLEWARE = [
@@ -177,3 +179,5 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+LOGIN_URL = 'accounts:login'
