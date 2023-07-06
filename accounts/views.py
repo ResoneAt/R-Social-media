@@ -6,6 +6,7 @@ from .models import User, MessageModel
 from django.contrib.auth import login, logout, authenticate
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import user_passes_test
 
 
 class SignupView(View):
@@ -25,7 +26,9 @@ class SignupView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = User.objects.create_user(email=cd['email'], username=cd['username'], password=cd['password1'])
+            user = User.objects.create_user(email=cd['email'],
+                                            username=cd['username'],
+                                            password=cd['password1'])
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('home:home')
         return render(request, self.template_name, {'signup_form': form})
@@ -52,10 +55,12 @@ class LoginView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(request, username=cd['username'], password=cd['password'])
+            user = authenticate(request,
+                                username=cd['username'],
+                                password=cd['password'])
             if user is not None:
                 login(request, user)
-                # messages.success(request, 'You logged in successfully', 'success')
+                messages.success(request, 'You logged in successfully', 'success')
                 if self.next:
                     return redirect(self.next)
                 return redirect('home:home')
@@ -67,9 +72,9 @@ class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
         if request.user.is_authenticated:
             logout(request)
-            # messages.warning(request, 'you are logout ...', 'warning')
+            messages.warning(request, 'you are logout ...', 'warning')
             return redirect('accounts:login')
-        # messages.error(request, 'you can not do this action', 'danger')
+        messages.error(request, 'you can not do this action', 'danger')
         return redirect('home:home')
 
 
@@ -94,6 +99,7 @@ class EditProfileView(LoginRequiredMixin, View):
         if request.user.id == user_id:
             form = self.form_class(instance=request.user)
             return render(request, self.template_name, {'form': form})
+        messages.error(request, 'You can not do this action!', 'danger')
         return redirect('home:home')
 
     def post(self, request):
@@ -107,38 +113,46 @@ class EditProfileView(LoginRequiredMixin, View):
 class DeleteAccountView(LoginRequiredMixin, View):
     template_name = 'accounts/confirm_delete_account.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.id == kwargs['user_id']:
+            messages.error(request, 'You can not do this action!', 'danger')
+            return redirect('accounts:user_profile', kwargs['user_id'])
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request, user_id):
-        if request.user.id == user_id:
-            return render(request, self.template_name)
-        return redirect('home:home')
+        return render(request, self.template_name)
 
     def post(self, request, user_id):
-        if request.user.id == user_id:
-            request.user.delete()
-            return redirect('accounts:login')
-        return render(request, self.template_name)
+        request.user.delete()
+        return redirect('accounts:login')
 
 
 class FollowView(LoginRequiredMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        if User.is_privet(kwargs['user_id']):
+            messages.error(request, 'you can not follow this user. this account is privet!', 'danger')
+            return redirect('accounts:user_profile', kwargs['user_id'])
+        if User.is_following(request.user, kwargs['user_id']):
+            messages.error(request, 'you can not follow this user again!', 'danger')
+            return redirect('accounts:user_profile', kwargs['user_id'])
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request, user_id):
-        if not User.is_privet(user_id):
-            if not User.is_following(request.user, user_id):
-                User.follow(request.user, user_id)
-                messages.success(request, 'your following success', 'success')
-            else:
-                messages.error(request, 'you can not follow this user again!', 'danger')
-            return redirect('accounts:user_profile', user_id)
-        messages.error(request, 'you can not follow this user. this account is privet!', 'danger')
+        User.follow(request.user, user_id)
+        messages.success(request, 'your following success', 'success')
         return redirect('accounts:user_profile', user_id)
 
 
 class UnFollowView(LoginRequiredMixin, View):
-    def get(self, request, user_id):
-        if User.is_following(request.user, user_id):
-            User.unfollow(request.user, user_id)
-            messages.success(request, 'your Unfollowing success', 'success')
-        else:
+    def dispatch(self, request, *args, **kwargs):
+        if not User.is_following(request.user, kwargs['user_id']):
             messages.error(request, 'you can not unfollow this user', 'warning')
+            return redirect('accounts:user_profile', kwargs['user_id'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, user_id):
+        User.unfollow(request.user, user_id)
+        messages.success(request, 'your Unfollowing success', 'success')
         return redirect('accounts:user_profile', user_id)
 
 
@@ -163,15 +177,18 @@ class FollowingListView(LoginRequiredMixin, View):
 
 
 class SentFollowRequest(LoginRequiredMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        if not User.is_privet(kwargs['user_id']):
+            messages.error(request, 'you can not sent request to this user', 'danger')
+            return redirect('accounts:user_profile', kwargs['user_id'])
+        if User.is_follow_requesting(request.user, kwargs['user_id']):
+            messages.error(request, 'You have already sent a request!', 'danger')
+            return redirect('accounts:user_profile', kwargs['user_id'])
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request, user_id):
-        if User.is_privet(user_id):
-            if not User.is_follow_requesting(request.user, user_id):
-                User.follow_request(request.user, user_id)
-                messages.success(request, 'your request sent success', 'success')
-            else:
-                messages.error(request, 'You have already sent a request!', 'success')
-        else:
-            messages.error(request, 'you can not sent request to this user', 'error')
+        User.follow_request(request.user, user_id)
+        messages.success(request, 'your request sent success', 'success')
         return redirect('accounts:user_profile', user_id)
 
 
@@ -232,8 +249,10 @@ class SentMessagesView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = get_object_or_404(User, pk=user_id)
         form = MessageForm()
-        messages_list = MessageModel.objects.filter(from_user=request.user, to_user=user) |\
-                        MessageModel.objects.filter(from_user=user, to_user=request.user)
+        messages_list = MessageModel.objects.filter(from_user=request.user,
+                                                    to_user=user) |\
+                        MessageModel.objects.filter(from_user=user,
+                                                    to_user=request.user)
         messages_list = messages_list.order_by('created_at')
         context = {
             'form': form,
@@ -257,11 +276,9 @@ class SentMessagesView(LoginRequiredMixin, View):
 class MessagesListView(LoginRequiredMixin, View):
     def get(self, request):
         users = User.objects.filter(
-            Q(sender__to_user=request.user) | Q(receiver__from_user=request.user)
-        ).distinct()
-        context = {
-            'users': users
-        }
+            Q(sender__to_user=request.user)
+            | Q(receiver__from_user=request.user)).distinct()
+        context = {'users': users}
         return render(request, 'accounts/chat_list.html', context)
 
 

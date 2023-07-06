@@ -32,6 +32,7 @@
                     <button class="btn btn-primary btn-sm Pending">Pending accept</button>
                     <a href="{% url 'accounts:edit_profile' request.user.id %}"><button class="btn btn-primary btn-sm Edit">Edit profile</button></a>
                     <button class="btn btn-primary btn-sm Save_messages">Save messages</button>
+                    <a href="{% url 'accounts:follow_request' user.id %}"><button class="btn btn-primary btn-sm Save_messages">follow request</button></a>
                     <a href="{% url 'posts:create_post' %}"><button class="btn btn-primary btn-sm Save_messages">create post</button></a>
 
                     <div class="d-flex justify-content-between align-items-center mt-4 px-4">

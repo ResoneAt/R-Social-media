@@ -47,14 +47,18 @@ class EditPostView(View):
                                          validate_max=True, can_delete=True)
     template_name = 'posts/create_post.html'
 
+    def setup(self, request, *args, **kwargs):
+        self.post_instance = get_object_or_404(PostModel, id=kwargs['post_id'], user=request.user)
+        return super().setup(request, *args, **kwargs)
+
     def get(self, request, post_id):
-        post = get_object_or_404(PostModel, id=post_id, user=request.user)
+        post = self.post_instance
         form = self.form_class(instance=post)
         image_formset = self.ImageFormSet(instance=post)
         return render(request, self.template_name, {'form': form, 'image_formset': image_formset})
 
     def post(self, request, post_id):
-        post = get_object_or_404(PostModel, id=post_id, user=request.user)
+        post = self.post_instance
         form = self.form_class(request.POST, request.FILES, instance=post)
         image_formset = self.ImageFormSet(request.POST, request.FILES, instance=post)
 
@@ -77,20 +81,22 @@ class EditPostView(View):
 
             messages.success(request, 'Your post has been updated successfully', 'success')
             return redirect('posts:detail', post_id=post.id)
-
         return render(request, self.template_name, {'form': form, 'image_formset': image_formset})
-    ...
 
 
 class DeletePostView(View):
-    def post(self, request, *args, **kwargs):
-        post = PostModel.objects.get(pk=kwargs['pk'])
+    def setup(self, request, *args, **kwargs):
+        self.post_instance = get_object_or_404(PostModel, pk=kwargs['post_id'])
+        return super().setup(request, *args, **kwargs)
+
+    def get(self, request, post_id):
+        post = self.post_instance
         if post.user != request.user:
             messages.error(request, 'You are not authorized to delete this post.')
             return redirect(post.get_absolute_url())
         post.delete()
         messages.success(request, 'Post deleted successfully.')
-        return redirect('accounts:user_profile')
+        return redirect('accounts:user_profile', request.user.id)
 
 
 class DetailPostView(View):
