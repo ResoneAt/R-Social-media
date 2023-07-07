@@ -20,7 +20,7 @@ This section should provide instructions on how to get started with the project.
 
 ### ERD
 
-  <img src="ERD socialmedia.jpg" alt="عنوان تصویر">
+  <img src="ERD.jpg" alt="عنوان تصویر">
 
 ### Prerequisites
 

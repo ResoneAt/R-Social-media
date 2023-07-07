@@ -50,7 +50,6 @@ class UserModelTest(TestCase):
         self.assertEqual(self.user.get_following_count(), 0)
         self.assertEqual(self.user.get_follower_count(), 1)
 
-
     def test_user_report(self):
         user2 = get_user_model().objects.create_user(
             username='testuser2',
