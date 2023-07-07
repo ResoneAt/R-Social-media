@@ -3,7 +3,8 @@ from .views import SignupView, LoginView, LogoutView,\
     ProfileView, EditProfileView, DeleteAccountView,\
     FollowView, UnFollowView, FollowerListView, FollowingListView,\
     SentFollowRequest, FollowRequestList, AcceptFollowRequest, RejectFollowRequest,\
-    ReportUserView, SentMessagesView, MessagesListView
+    ReportUserView, SentMessagesView, MessagesListView,\
+    UserPasswordResetView,UserPasswordResetDoneView,UserPasswordResetConfirmView,UserPasswordResetCompleteView
 
 
 app_name = 'accounts'
@@ -25,4 +26,12 @@ urlpatterns = [
     path('accounts/follow_request_list/', FollowRequestList.as_view(), name='follow_request_list'),
     path('accounts/follow_request_list/accept/<int:user_id>/', AcceptFollowRequest.as_view(), name='accept_request'),
     path('accounts/follow_request_list/reject/<int:user_id>/', RejectFollowRequest.as_view(), name='reject_request'),
+    path('reset-password/form/', UserPasswordResetView.as_view(),
+         name='reset_password_form'),
+    path('reset-password/done/', UserPasswordResetDoneView.as_view(),
+         name='password_reset_done'),
+    path('reset-password/confirm/<uidb64>/<token>/', UserPasswordResetConfirmView.as_view(),
+         name='password_reset_confirm'),
+    path('reset-password/complete/', UserPasswordResetCompleteView.as_view(),
+         name='password_reset_complete'),
 ]

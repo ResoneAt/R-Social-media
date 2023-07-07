@@ -8,7 +8,11 @@
             </div>
             <div class="user text-center">
                 <div class="profile">
-                    <img src="{{ user.image.url }}" class="rounded-circle" width="80" style="height:80px; width:80px;">
+                    {% if user.image %}
+                        <img src="{{ user.image.url }}" class="rounded-circle" width="80" style="height:80px; width:80px;">
+                    {% else %}
+                        <img src="mm" class="rounded-circle" width="80" style="height:80px; width:80px;">
+                    {% endif %}
                 </div>
             </div>
             <div class="mt-5 text-center">

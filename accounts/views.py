@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import View
 from .forms import SignupUserForm, LoginUserForm, EditProfileForm,ReportUserForm,MessageForm
@@ -6,7 +7,8 @@ from .models import User, MessageModel
 from django.contrib.auth import login, logout, authenticate
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.views import\
+    PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
 
 
 class SignupView(View):
@@ -282,3 +284,20 @@ class MessagesListView(LoginRequiredMixin, View):
         return render(request, 'accounts/chat_list.html', context)
 
 
+class UserPasswordResetView(PasswordResetView):
+    template_name = 'accounts/password_reset_form.html'
+    email_template_name = 'accounts/password_reset_email.html'
+    success_url = reverse_lazy('accounts:password_reset_done')
+
+
+class UserPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'accounts/password_reset_done.html'
+
+
+class UserPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'accounts/password_reset_confirm.html'
+    success_url = reverse_lazy('accounts:password_reset_complete')
+
+
+class UserPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'accounts/password_reset_complete.html'
