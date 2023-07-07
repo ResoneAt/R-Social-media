@@ -50,16 +50,6 @@ class UserModelTest(TestCase):
         self.assertEqual(self.user.get_following_count(), 0)
         self.assertEqual(self.user.get_follower_count(), 1)
 
-    # def test_user_image(self):
-    #     image = ImageUserModel.objects.create(
-    #         image='test.jpg',
-    #         user=self.user,
-    #         alt='Test Image'
-    #     )
-    #
-    #     self.assertEqual(str(image), 'Test Image - user : testuser')
-    #     self.assertEqual(self.user.profile_images().count(), 1)
-    #     self.assertEqual(self.user.main_profile_image(), image)
 
     def test_user_report(self):
         user2 = get_user_model().objects.create_user(
@@ -105,12 +95,12 @@ class RelationModelTest(TestCase):
         )
 
     def test_relation_creation(self):
-        relation = RelationModel(from_user=self.user1, to_user=self.user2)
-        relation.save()
-
-        self.assertEqual(str(relation), 'testuser1 follows testuser2')
+        # Add user2 to the followers of user1
+        self.user1.following.add(self.user2)
         self.assertEqual(self.user1.following.count(), 1)
-        self.assertEqual(self.user2.follower.count(), 1)
+        self.assertEqual(self.user2.followers.count(), 1)
+        self.assertEqual(self.user1.following.first(), self.user2)
+        self.assertEqual(self.user2.followers.first(), self.user1)
 
 
 class FollowRequestModelTest(TestCase):

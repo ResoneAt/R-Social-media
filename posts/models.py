@@ -86,7 +86,7 @@ class ReportPostModel(BaseModel):
         verbose_name, verbose_name_plural = _("Post Report"), _("Post Reports")
 
     def __str__(self):
-        return f'{self.post} - {self.body[:20]}'
+        return f'{self.user.username} - {self.post.body}'
 
 
 class LikeModel(BaseModel):
@@ -98,7 +98,7 @@ class LikeModel(BaseModel):
         verbose_name, verbose_name_plural = _("Like"), _("Likes")
 
     def __str__(self):
-        return f'{self.post}-{self.user.username}'
+        return f'{self.user.username} - {self.post.body}'
 
 
 class CommentModel(BaseModel):
@@ -113,4 +113,4 @@ class CommentModel(BaseModel):
         verbose_name, verbose_name_plural = _("Comment"), _("Comments")
 
     def __str__(self):
-        return f'{self.author.username} - {self.body[:20]} - {self.post}'
+        return f'{self.user.username} - {self.body} - {self.post.body}'
