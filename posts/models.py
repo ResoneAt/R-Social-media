@@ -3,6 +3,9 @@ from django.urls import reverse
 from accounts.models import User
 from core.models import BaseModel
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
+from .manager import MyPostModelManager
+from django.db.models.manager import Manager
 
 
 class PostModel(BaseModel):
@@ -14,6 +17,11 @@ class PostModel(BaseModel):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     slug = models.SlugField(default='0-0')
+
+    deleted_at = models.DateField(blank=True, null=True, editable=False)
+    is_deleted = models.BooleanField(blank=True, null=True, default=False)
+
+    objects = MyPostModelManager()
 
     class Meta:
         verbose_name, verbose_name_plural = _("Post"), _("Posts")
@@ -44,11 +52,20 @@ class PostModel(BaseModel):
 
     def delete(self, using=None, keep_parents=False):
         self.is_active = False
+        self.is_deleted = True
+        self.deleted_at = timezone.now()
         self.save()
 
     def get_absolute_url(self):
         kwargs = {'slug': self.slug}
         return reverse('posts:detail_post', kwargs=kwargs)
+
+
+class RecyclePost(PostModel):
+    deleted = Manager()
+
+    class Meta:
+        proxy = True
 
 
 class MoviePostModel(BaseModel):
