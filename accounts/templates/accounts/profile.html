@@ -26,6 +26,11 @@
                       <button style="font-size:12px; margin-left:4px;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">DeleteAccount</button>
                     </a>
                   </div>
+                    <a href="{% url 'posts:create_post'  %}">
+                      <button style="font-size:12px; margin-left:4px;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">CreatPost</button>
+                    </a>
+                  </div>
+
                 {% else %}
                   {% if user.account_type == 'public' %}
                     {% if not is_following %}
