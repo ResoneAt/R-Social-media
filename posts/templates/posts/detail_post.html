@@ -2,6 +2,7 @@
 
 {% block main-content %}
     <div class="card" style="z-index:1;">
+        <img src="{{ post.image.url }}">
         <a href="{% url 'accounts:user_profile' post.user.id %}" style="text-decoration:none; font-size:20px; background-color:lavender;" class="card-body">{{ post.user }}</a>
         <p class="card-body">{{ post.body }}</p>
         <small class="card-body" style="margin-top:-30px; color:#C0C0C0; font-size:12px;">{{ post.updated_time|date:"D j M o" }}</small>
@@ -10,7 +11,6 @@
         {% else %}
             <a class="btn btn-outline-secondary btn-sm col-md-1" href="{% url 'posts:dislike_post' post.id %}">{{ post.like_count }} DisLike</a>
         {% endif %}
-
         <div class="card" style="background-color:DimGrey;">
             <h5 align="center" style="color:white; margin-top:10px;">Comments</h5>
             {% for comment in comments %}

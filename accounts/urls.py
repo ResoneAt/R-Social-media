@@ -3,18 +3,19 @@ from .views import SignupView, LoginView, LogoutView,\
     ProfileView, EditProfileView, DeleteAccountView,\
     FollowView, UnFollowView, FollowerListView, FollowingListView,\
     SentFollowRequest, FollowRequestList, AcceptFollowRequest, RejectFollowRequest,\
-    ReportUserView, SentMessagesView, MessagesListView
+    ReportUserView, SentMessagesView, MessagesListView,\
+    UserPasswordResetView,UserPasswordResetDoneView,UserPasswordResetConfirmView,UserPasswordResetCompleteView
 
 
 app_name = 'accounts'
 urlpatterns = [
-    path('accounts/signup/', SignupView.as_view(), name='signup'),
+    path('accounts/signup-user/', SignupView.as_view(), name='signup'),
     path('accounts/login/', LoginView.as_view(), name='login'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     path('accounts/profile/<int:user_id>/', ProfileView.as_view(), name='user_profile'),
     path('accounts/profile/edit/<int:user_id>/', EditProfileView.as_view(), name='edit_profile'),
-    path('accounts/profile/follower/<int:user_id>/', FollowerListView.as_view(), name='follower_list'),
-    path('accounts/profile/following/<int:user_id>/', FollowingListView.as_view(), name='following_list'),
+    path('accounts/profile/<int:user_id>/follower/', FollowerListView.as_view(), name='follower_list'),
+    path('accounts/profile/<int:user_id>/following/', FollowingListView.as_view(), name='following_list'),
     path('accounts/profile/delete/<int:user_id>/', DeleteAccountView.as_view(), name='delete_account'),
     path('accounts/profile/report/<int:user_id>/', ReportUserView.as_view(), name='report_user'),
     path('accounts/profile/chat-list/<int:user_id>/', SentMessagesView.as_view(), name='message'),
@@ -25,4 +26,12 @@ urlpatterns = [
     path('accounts/follow_request_list/', FollowRequestList.as_view(), name='follow_request_list'),
     path('accounts/follow_request_list/accept/<int:user_id>/', AcceptFollowRequest.as_view(), name='accept_request'),
     path('accounts/follow_request_list/reject/<int:user_id>/', RejectFollowRequest.as_view(), name='reject_request'),
+    path('reset-password/form/', UserPasswordResetView.as_view(),
+         name='reset_password_form'),
+    path('reset-password/done/', UserPasswordResetDoneView.as_view(),
+         name='password_reset_done'),
+    path('reset-password/confirm/<uidb64>/<token>/', UserPasswordResetConfirmView.as_view(),
+         name='password_reset_confirm'),
+    path('reset-password/complete/', UserPasswordResetCompleteView.as_view(),
+         name='password_reset_complete'),
 ]

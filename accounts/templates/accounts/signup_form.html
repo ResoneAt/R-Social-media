@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load socialaccount %}
 <html lang="en" dir="ltr">
    <head>
       <meta charset="utf-8">
@@ -36,15 +37,15 @@
                   {{ signup_form.password1 }}
                   <span class="show">SHOW</span>
                </div>
-               <div class="signup" style='background:red;'>
-                  {% for error in signup_form.password2.errors %}
-                     {{ error }}
-                  {% endfor %}
-               </div>
                <div class="field space">
                   <span class="fa fa-lock"></span>
                   {{ signup_form.password2 }}
                   <span class="show">SHOW</span>
+               </div>
+               <div class="signup" style='background:red;'>
+                  {% for error in signup_form.non_field_errors %}
+                     {{error}}
+                  {% endfor %}
                </div>
                <div class="field space">
                   <input type="submit" value="SIGNUP">
@@ -54,12 +55,12 @@
                Or login with
             </div>
             <div class="links">
-               <div class="facebook">
-                  <i class="fab fa-facebook-f"><span>Facebook</span></i>
+               <div class="facebook" style="background:black; border:black;">
+                  <i class="fab fa-github"><a href="{% provider_login_url 'github' %}"><span>Github</span><</a></i>
                </div>
-               <div class="instagram">
-                  <i class="fab fa-google"><span>Google</span></i>
-               </div>
+                  <div class="instagram">
+                     <i class="fab fa-google"><a href="{% provider_login_url 'google' %}"><span>Google</span></a></i>
+                  </div>
             </div>
             <div class="signup">
                Do you have an account?

@@ -23,7 +23,7 @@ SECRET_KEY = 'django-insecure-^ddkhn2$rjc#1*r#%a4otzv+cg)@_0mve(m%*jtc*_v64vk*_4
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+import os
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -38,6 +38,14 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'accounts.apps.AccountsConfig',
     'posts.apps.PostsConfig',
+    'debug_toolbar',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+    'material',
+    'material.frontend',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'SocialMedia.urls'
@@ -63,9 +72,43 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '823712811201-d4qg801diasc76s6sbffnf4br13ufn73.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    },
+    'github': {
+        'APP': {
+            'client_id': 'd09ede4cd2754de190b4',
+            'secret': '20147b5a29b226457e447824e79563a8fda61e5a',
+            'key': ''
+        }
+    }
+}
+
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
+
+# Additional configuration settings
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET= True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
 ]
 
 WSGI_APPLICATION = 'SocialMedia.wsgi.application'
@@ -134,4 +177,16 @@ LOGOUT_REDIRECT_URL = 'accounts:login'
 AUTHENTICATION_BACKENDS = [
     'accounts.authenticate.UsernameBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+LOGIN_URL = 'accounts:login'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'eslamiramin85@gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_PASSWORD = 'ykluqtibxriqhdbs'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Resonegram'

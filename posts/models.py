@@ -3,16 +3,25 @@ from django.urls import reverse
 from accounts.models import User
 from core.models import BaseModel
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
+from .manager import MyPostModelManager
+from django.db.models.manager import Manager
 
 
 class PostModel(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     body = models.TextField(help_text='Please write caption')
+    image = models.ImageField(upload_to='posts',blank=True, null=True, help_text='Please upload your image')
     location = models.CharField(max_length=730, blank=True, null=True,
                                 help_text='You can write the location of this post')
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     slug = models.SlugField(default='0-0')
+
+    deleted_at = models.DateField(blank=True, null=True, editable=False)
+    is_deleted = models.BooleanField(blank=True, null=True, default=False)
+
+    objects = MyPostModelManager()
 
     class Meta:
         verbose_name, verbose_name_plural = _("Post"), _("Posts")
@@ -32,8 +41,8 @@ class PostModel(BaseModel):
     def get_liker_list(self):
         return User.objects.filter(liker__post=self)
 
-    def post_images(self):
-        return ImagePostModel.objects.filter(post=self)
+    # def post_images(self):
+    #     return ImagePostModel.objects.filter(post=self)
 
     def post_movies(self):
         return MoviePostModel.objects.filter(post=self)
@@ -43,25 +52,20 @@ class PostModel(BaseModel):
 
     def delete(self, using=None, keep_parents=False):
         self.is_active = False
+        self.is_deleted = True
+        self.deleted_at = timezone.now()
         self.save()
 
     def get_absolute_url(self):
-        kwargs = {
-            'slug': self.slug
-        }
+        kwargs = {'slug': self.slug}
         return reverse('posts:detail_post', kwargs=kwargs)
 
 
-class ImagePostModel(BaseModel):
-    image = models.ImageField(upload_to='posts', help_text='Please upload your image')
-    post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='image')
-    alt = models.CharField(max_length=73, help_text='please write alt for image.')
+class RecyclePost(PostModel):
+    deleted = Manager()
 
     class Meta:
-        verbose_name, verbose_name_plural = _("Image"), _("Images")
-
-    def __str__(self):
-        return self.alt
+        proxy = True
 
 
 class MoviePostModel(BaseModel):
@@ -82,7 +86,7 @@ class ReportPostModel(BaseModel):
         verbose_name, verbose_name_plural = _("Post Report"), _("Post Reports")
 
     def __str__(self):
-        return f'{self.post} - {self.body[:20]}'
+        return f'{self.user.username} - {self.post.body}'
 
 
 class LikeModel(BaseModel):
@@ -94,7 +98,7 @@ class LikeModel(BaseModel):
         verbose_name, verbose_name_plural = _("Like"), _("Likes")
 
     def __str__(self):
-        return f'{self.post}-{self.user.username}'
+        return f'{self.user.username} - {self.post.body}'
 
 
 class CommentModel(BaseModel):
@@ -109,4 +113,4 @@ class CommentModel(BaseModel):
         verbose_name, verbose_name_plural = _("Comment"), _("Comments")
 
     def __str__(self):
-        return f'{self.author.username} - {self.body[:20]} - {self.post}'
+        return f'{self.user.username} - {self.body} - {self.post.body}'
