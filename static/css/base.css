@@ -1,7 +1,10 @@
 /* Official and not clone */
 @import url('//fonts.cdnfonts.com/css/billabong');
 {% load static %}
-
+.container {
+  display: flex;
+  flex-direction: row;
+}
 body {
   background: url('{% static 'images/homee.png' %}');
   height: 100vh;
@@ -16,7 +19,6 @@ body-s {
 	height: 100vh;
 
 }
-
 @keyframes gradient-s {
 	0% {
 		background-position: 0% 50%;
@@ -30,6 +32,8 @@ body-s {
 }
 
 .maincontent{
+  flex: 2;
+  order: 2;
     background: rgba(255,255,255,0.9);
     box-shadow: -1px 4px 28px 0px rgba(0,0,0,0.2);
 	position: fixed;
@@ -70,6 +74,8 @@ main {
 	justify-content: space-around;
 	padding: 0px 50px;
 	box-sizing: border-box;
+	flex: 1;
+    order: 1;
 	z-index: 2;
 	/* animation magic */
 	transition: all 0.4s ease-in-out;
