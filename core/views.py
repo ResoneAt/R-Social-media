@@ -12,6 +12,6 @@ class HomePageView(LoginRequiredMixin, View):
         if request.GET.get('search'):
             post = post.filter(body__icontains=request.GET['search'])
         search = SearchForm
-        return render(request, 'core/home.html',
+        return render(request, 'core/02_home.html',
                       {'post': post,
                        'search_form': search})
