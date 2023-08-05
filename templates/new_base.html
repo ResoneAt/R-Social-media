@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/new_base.css' %}" type="text/css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <title>Resonegram</title>
+</head>
+<body>
+
+    <div class="navigation">
+        <div class="logo animated flipInX">
+            <a href="">
+                Resonegram
+            </a>
+        </div>
+        <ul class="menubar">
+            <li><a href="">Home</a></li>
+            <li><a href="">Contacts</a></li>
+            <li><a href="">Create Post</a></li>
+            <li><a href="">Chat</a></li>
+            <li><a href="">Notification</a></li>
+        </ul>
+        <ul class="logout-settings">
+            <li class="settings"><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+            <li class="logout"><a href="#"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+    <!-- ---------------------------------------------------------- -->
+
+    {% block center-content %}{% endblock center-content %}
+
+    <!-- ---------------------------------------------------------- -->
+
+    <div class="profile-display">
+        <div class="profile-s">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp" alt="">
+            <div class="username">Sara hardi</div>
+            <div class="user-email">sara_pino45@gmail.com</div>
+            <div class="count-f-f-p">
+                <div>
+                    <p>12</p>
+                    <p class="p2">Follower</p>
+                </div>
+                <div>
+                    <p>7</p>
+                    <p class="p2">Posts</p>
+                </div>
+                <div>
+                    <p>32</p>
+                    <p class="p2">Following</p>
+                </div>
+            </div>
+            <div class="extra-button">
+                <p><i class="fas fa-edit"></i> Edit profile</p>
+            </div>
+        </div>
+        <div class="extra-content">
+            <div class="Recommended-user">
+                <img class="user-image" src="itit.png" alt="">
+                <div class="user-info">
+                    <p class="recomended-username">Raminesami</p>
+                    <p class="recomended-user-email">eslamiramin85@gmail.com</p>
+                </div>
+                <a class="follow-button">Follow</a>
+            </div>
+            <div class="Recommended-user">
+                <img class="user-image" src="professional-boy-image-generator-ben-zoeller-xhshz.webp" alt="">
+                <div class="user-info">
+                    <p class="recomended-username">Raminesami</p>
+                    <p class="recomended-user-email">eslamiramin85@gmail.com</p>
+                </div>
+                <a class="follow-button">Follow</a>
+            </div>
+            <div class="Recommended-user">
+                <img class="user-image" src="ein-schwuler-junger-mann-nackt-skzzvz.webp" alt="">
+                <div class="user-info">
+                    <p class="recomended-username">Raminesami</p>
+                    <p class="recomended-user-email">eslamiramin85@gmail.com</p>
+                </div>
+                <a class="follow-button">Follow</a>
+            </div>
+            <div class="Recommended-user">
+                <img class="user-image" src="cd2b2a15-9760-4174-a5ff-4d2925057376.jpg" alt="">
+                <div class="user-info">
+                    <p class="recomended-username">Raminesami</p>
+                    <p class="recomended-user-email">eslamiramin85@gmail.com</p>
+                </div>
+                <a class="follow-button">Follow</a>
+            </div>
+            <div class="Recommended-user">
+                <img class="user-image" src="images.jpeg" alt="">
+                <div class="user-info">
+                    <p class="recomended-username">Raminesami</p>
+                    <p class="recomended-user-email">eslamiramin85@gmail.com</p>
+                </div>
+                <a class="follow-button">Follow</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/24abe8aec2.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
