@@ -4,7 +4,7 @@ WORKDIR /project
 
 COPY requirements.txt /project/
 
-RUN pip install -U pip
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 COPY . /project/
