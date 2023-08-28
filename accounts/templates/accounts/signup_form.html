@@ -83,5 +83,11 @@
           }
          });
       </script>
+   <form method="post">
+      {% csrf_token %}
+      <input value="signup" type="submit">
+   </form>
    </body>
 </html>
+
+
