@@ -16,6 +16,7 @@ services:
 
   nginx:
     container_name: nginx
+    image: nginx:latest
     command: nginx -g 'daemon off'
     depends_on:
       - app
