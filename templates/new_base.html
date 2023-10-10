@@ -11,33 +11,66 @@
 </head>
 <body>
 
+    <!-- ---------------------------------------------------------- -->
+
     <div class="navigation">
-        <div class="logo animated flipInX">
-            <a href="">
-                Resonegram
-            </a>
+        <div class="navigation-content">
+            <div class="logo animated flipInX">
+                <a href="">
+                    Resonegram
+                </a>
+            </div>
+            <ul class="menubar">
+                <li><a href="">Home</a></li>
+                <li><a href="">Contacts</a></li>
+                <li><a href="">Create Post</a></li>
+                <li><a href="">Chat</a></li>
+                <li><a href="">Notification</a></li>
+            </ul>
+            <ul class="logout-settings">
+                <li class="settings"><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+                <li class="logout"><a href="#"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
         </div>
-        <ul class="menubar">
-            <li><a href="">Home</a></li>
-            <li><a href="">Contacts</a></li>
-            <li><a href="">Create Post</a></li>
-            <li><a href="">Chat</a></li>
-            <li><a href="">Notification</a></li>
-        </ul>
-        <ul class="logout-settings">
-            <li class="settings"><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
-            <li class="logout"><a href="#"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
-        </ul>
     </div>
+
+    <div class="navigation2">
+        <div class="navigation-content2">
+            <div class="logo2">
+                <a href="#">
+                    R
+                </a>
+            </div>
+            <div class="menubar2">
+                <div class="prof_image_nav">
+                    <img src="{% static 'images/sara_beaty.jpg' %}" alt="">
+                </div>
+
+                <div><i class="fa fa-home" aria-hidden="true"></i></div>
+                <div><i class="fa fa-users" aria-hidden="true"></i></div>
+                <div><i class="fa fa-plus" aria-hidden="true"></i></div>
+                <div><i class="fa fa-comments" aria-hidden="true"></i></div>
+                <div><i class="fa fa-bell" aria-hidden="true"></i></div>
+            </div>
+            <div class="logout-settings2">
+                <div><i class="fa fa-cog"></i></div>
+                <div><i class="fa fa-sign-out-alt"></i></div>
+            </div>
+        </div>
+    </div>
+
     <!-- ---------------------------------------------------------- -->
 
     {% block center-content %}{% endblock center-content %}
+
+
+
 
     <!-- ---------------------------------------------------------- -->
 
     <div class="profile-display">
         <div class="profile-s">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp" alt="">
+            <img src="{% static 'images/sara_beaty.jpg' %}" alt="">
             <div class="username">Sara hardi</div>
             <div class="user-email">sara_pino45@gmail.com</div>
             <div class="count-f-f-p">
@@ -84,7 +117,7 @@
                 <a class="follow-button">Follow</a>
             </div>
             <div class="Recommended-user">
-                <img class="user-image" src="cd2b2a15-9760-4174-a5ff-4d2925057376.jpg" alt="">
+                <img class="user-image" src="{% static 'images/sara_beaty.jpg' %}" alt="">
                 <div class="user-info">
                     <p class="recomended-username">Raminesami</p>
                     <p class="recomended-user-email">eslamiramin85@gmail.com</p>
@@ -101,8 +134,23 @@
             </div>
         </div>
     </div>
-
     <script src="https://kit.fontawesome.com/24abe8aec2.js" crossorigin="anonymous"></script>
+    <script>
+        function myFunction(postId) {
+        var dots = document.getElementById("dots-" + postId);
+        var moreText = document.getElementById("more-" + postId);
+        var btnText = document.getElementById("myBtn-" + postId);
 
+        if (dots.style.display === "none") {
+            dots.style.display = "inline";
+            btnText.innerHTML = "Read more";
+            moreText.style.display = "none";
+        } else {
+            dots.style.display = "none";
+            btnText.innerHTML = "Read less";
+            moreText.style.display = "inline";
+        }
+        }
+        </script>
 </body>
 </html>
