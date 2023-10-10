@@ -9,7 +9,7 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
    </head>
    <body>
-      <div class="bg-img" style="background:url(' {% static 'images/bg.jpg' %}'); background-size: cover; ')">
+      <div class="bg-img" >
          <div class="content">
             <header>Signup</header>
             <form action="" method="POST" novalidate>
@@ -55,11 +55,11 @@
                Or login with
             </div>
             <div class="links">
-               <div class="facebook" style="background:black; border:black;">
-                  <i class="fab fa-github"><a href="{% provider_login_url 'github' %}"><span>Github</span><</a></i>
+               <div class="facebook" style="background:gray; border:black;">
+                  <i class="fab fa-github"><a style="text-decoration:none; color:white;" href="{% provider_login_url 'github' %}"><span>Github</span></a></i>
                </div>
                   <div class="instagram">
-                     <i class="fab fa-google"><a href="{% provider_login_url 'google' %}"><span>Google</span></a></i>
+                     <i class="fab fa-google"><a style="text-decoration:none; color:white;" href="{% provider_login_url 'google' %}"><span>Google</span></a></i>
                   </div>
             </div>
             <div class="signup">

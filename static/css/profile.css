@@ -1,10 +1,173 @@
-.img-fluid{
-    position:absolut;
-    margin-bottom:200px;
+.center-content{
+    overflow: scroll; /* Hide horizontal scrollbar */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    background-color:rgb(241, 241, 241);
+    align-items: center;
+    display: flex;
+
 }
-.card {
-    width: 100%;
+.center-content::-webkit-scrollbar{
+    display: none;
 }
-.col-lg-9 {
+.profile-father-info{
+    margin: 20px;
+    width: 93%;
+    border-radius: 16px;
+    background-color:rgb(252, 254, 255);
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.profile-image-follower-following-posts {
+    height: 122px;
+    display: flex;
+    align-items: center;
+    margin-top: 35px;
+    width: 90%;
+    flex-direction: row;
+}
+
+.profile-image-follower-following-posts div img {
+    align-items: center;
+    float: left;
+    display: inline;
+    height: 122px;
+    width: 122px;
+    border-radius: 50%;
+}
+.profile-image-follower-following-posts div a{
+    font-size: 22px;
+    font-weight: 600;
+    text-decoration: none;
+    display: block;
+    justify-content: center;
+    color: rgb(48, 48, 48);
+}
+
+.profile-counter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.profile-counter div {
+    margin-left: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: inline-block;
+    text-align: center;
+}
+.profile-user-info{
+    align-items: center;
+    justify-content: center;
+    margin-top: 8px;
+    width: 90%;
+    display: block;
+}
+.profile-user-info div{
+    margin-top: 4px;
+}
+.profile-user-info div span{
+    opacity: 50%;
+}
+.profile-user-info .profile-bio{
+    width: 70%;
+}
+.profile-user-info .profile-fullname{
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+.profile-follow-message-btn{
+    width: 90%;
+    margin:16px 16px;
+    height: 32px;
+    margin-bottom: 32px;
+}
+.profile-follow-message-btn a{
+    background-color: rgb(241, 241, 241);
+    color: rgb(15, 15, 15);
+    height: 100%;
+    border-radius: 8px;
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 10px;
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+.profile-follow-message-btn a:hover{
+    background-color: rgb(19, 19, 19);
+    color: aliceblue;
+}
+.profile-message-button{
+    width: 46%;
+}
+.profile-follow-button{
+    width: 46%;
+}
+.profile-options-button{
+    width: 5%;
+}
+.profile-father-posts{
+    width: 93%;
+    min-height: 100px;
+}
+.posts-headers{
+    margin-top: -20px;
+    height: 48px;
     width: 100%;
+    border-radius: 16px;
+    background-color:rgb(252, 254, 255);
+    margin-bottom: 16px;
+    display: block;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.posts-headers h2{
+    padding-top: 9px;
+    display: block;
+    color: rgba(0, 0, 0, 0.758);
+}
+.activity-headers{
+    height: 48px;
+    border-radius: 16px;
+
+}
+@media only screen and (max-width: 950px) {
+    .profile-image-follower-following-posts div a{
+        font-size: 18px;
+        font-weight: 600;
+        text-decoration: none;
+        display: block;
+        justify-content: center;
+    }
+    .profile-counter div {
+        margin-left: 6vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        display: inline-block;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .profile-image-follower-following-posts div a{
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        display: block;
+        justify-content: center;
+    }
+    .profile-counter div {
+        margin-left: 6vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        display: inline-block;
+    }
 }

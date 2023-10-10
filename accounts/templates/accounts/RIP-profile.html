@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block main-content %}
+<section class="h-100 gradient-custom-2">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card">
+          <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+
+                {% if user.image %}
+              <img src="{{ user.image.url }}"
+                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 300px; height:300px; z-index: 1">
+                {% else %}
+              <img  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 150px; z-index: 1">
+                {% endif %}
+                {% if request.user == user %}
+                  <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 0px;">
+                    <a href="{% url 'accounts:edit_profile' request.user.id %}">
+                      <button style="font-size:12px;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Edit Profile</button>
+                    </a>
+                    <a href="{% url 'accounts:delete_account' request.user.id %}">
+                      <button style="font-size:12px; margin-left:4px;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">DeleteAccount</button>
+                    </a>
+                  </div>
+                    <a href="{% url 'posts:create_post'  %}">
+                      <button style="font-size:12px; margin-left:4px;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">CreatPost</button>
+                    </a>
+                  </div>
+
+                {% else %}
+                  {% if user.account_type == 'public' %}
+                    {% if not is_following %}
+                      <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 0px;">
+                        <a href="{% url 'accounts:follow' user.id %}" style="margin-top:30px; z-index:10">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+                             mdl-button--accent">Follow</button>
+                        </a>
+
+                        <a href="{% url 'accounts:message' user.id %}" style="margin-top:30px; z-index:10">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+                             mdl-button--accent">Message</button>
+                        </a>
+                      </div>
+                    {% else %}
+                      <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 0px;">
+                        <a href="{% url 'accounts:unfollow' user.id %}" style="margin-top:30px; z-index:10">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+                             mdl-button--accent">Unfollow</button>
+                        </a>
+
+                        <a href="{% url 'accounts:message' user.id %}" style="margin-top:30px; z-index:10">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+                             mdl-button--accent">Message</button>
+                        </a>
+                      </div>
+
+                    {% endif %}
+                  {% else %}
+                    {% if not is_follow_requesting %}
+                        <a href="{% url 'accounts:follow_request' request.user.id %}" style="margin-top:30px; z-index:10">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+                             mdl-button--accent">Follow</button>
+                        </a>
+                    {% else %}
+                        <a style="margin-top:30px; z-index:10">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+                             mdl-button--accent">Pending</button>
+                        </a>
+                    {% endif %}
+                  {% endif %}
+                {% endif %}
+
+            </div>
+            <div class="ms-3" style="position:absolut; margin-top: 60px; z-index:11;">
+              <h2>{{ user.username }}</h2>
+              <p style="margin-top:-10px;">{{ user.email }}</p>
+            </div>
+          </div>
+          <div class="p-4 text-black" style="background-color: #f8f9fa;">
+            <div class="d-flex justify-content-end text-center py-1">
+              <div>
+                <p class="mb-1 h5">{{ user.get_posts_count }}</p>
+                <p class="small text-muted mb-0">Posts</p>
+              </div>
+              <div class="px-3">
+                <p class="mb-1 h5">{{ user.get_follower_count }}</p>
+                <p class="small text-muted mb-0">Followers</p>
+              </div>
+              <div>
+                <p class="mb-1 h5">{{ user.get_following_count }}</p>
+                <p class="small text-muted mb-0">Following</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-4 text-black">
+            <div class="mb-5">
+              <p class="lead fw-normal mb-1">Bio</p>
+              <div class="p-4" style="background-color: #f8f9fa;">
+                <p>{{ user.bio }}</p>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <p class="lead fw-normal mb-0">Recent photos</p>
+              <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
+            </div>
+            <div class="row g-2">
+              <div class="col mb-12">
+                  <div class="card">
+                      {% if user.get_posts %}
+                          {% for post in user.get_posts %}
+                              <div class="card" style="width:1100px; margin:16px;">
+                                      <a href="{% url 'accounts:user_profile' post.user.id %}" style="text-decoration:none; font-size:20px; background-color:lavender;" class="card-body">{{ post.user }}</a>
+                                      <a href="{{ post.get_absolute_url }}" class="card-body">{{ post.body|truncatewords:5 }}</a>
+                                      <small class="card-body" style="margin-top:-30px; color:#C0C0C0; font-size:12px; ">{{ post.created_at|date:"D j M o" }}</small>
+                              </div>
+                          {% empty %}
+                              <p>list is empty...</p>
+                          {% endfor %}
+                      {% endif %}
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

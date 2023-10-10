@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/new_base.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}" type="text/css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <title>Resonegram</title>
 </head>
@@ -16,20 +17,20 @@
     <div class="navigation">
         <div class="navigation-content">
             <div class="logo animated flipInX">
-                <a href="">
+                <a href="{% url 'home:home' %}">
                     Resonegram
                 </a>
             </div>
             <ul class="menubar">
-                <li><a href="">Home</a></li>
+                <li><a href="{% url 'home:home' %}">Home</a></li>
                 <li><a href="">Contacts</a></li>
-                <li><a href="">Create Post</a></li>
+                <li><a href="{% url 'posts:create_post' %}">Create Post</a></li>
                 <li><a href="">Chat</a></li>
                 <li><a href="">Notification</a></li>
             </ul>
             <ul class="logout-settings">
-                <li class="settings"><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
-                <li class="logout"><a href="#"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+<!--                <li class="settings"><a href="#"><i class="fa fa-cog"></i> Settings</a></li>-->
+                <li class="logout"><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>
     </div>
@@ -37,24 +38,28 @@
     <div class="navigation2">
         <div class="navigation-content2">
             <div class="logo2">
-                <a href="#">
+                <a href="{% url 'home:home' %}">
                     R
                 </a>
             </div>
             <div class="menubar2">
                 <div class="prof_image_nav">
-                    <img src="{% static 'images/sara_beaty.jpg' %}" alt="">
+                    {% if request.user.image %}
+                        <a href="{% url 'accounts:user_profile' request.user.id %}"><img src="{{ request.user.image.url }}" alt=""></a>
+                    {% else %}
+                        <a href=""><img src="{% static 'images/avatar.png' %}"></a>
+                    {% endif %}
                 </div>
 
-                <div><i class="fa fa-home" aria-hidden="true"></i></div>
-                <div><i class="fa fa-users" aria-hidden="true"></i></div>
-                <div><i class="fa fa-plus" aria-hidden="true"></i></div>
-                <div><i class="fa fa-comments" aria-hidden="true"></i></div>
-                <div><i class="fa fa-bell" aria-hidden="true"></i></div>
+                <div><a href="{% url 'home:home' %}"><i class="fa fa-home" aria-hidden="true"></i></a></div>
+                <div><a href=""><i class="fa fa-users" aria-hidden="true"></i></a></div>
+                <div><a href="{% url 'posts:create_post' %}"><i class="fa fa-plus" aria-hidden="true"></i></a></div>
+                <div><a href="{% url 'accounts:chat_list' %}"><i class="fa fa-comments" aria-hidden="true"></i></a></div>
+                <div><a href=""><i class="fa fa-bell" aria-hidden="true"></i></a></div>
             </div>
             <div class="logout-settings2">
-                <div><i class="fa fa-cog"></i></div>
-                <div><i class="fa fa-sign-out-alt"></i></div>
+<!--                <div><i class="fa fa-cog"></i></div>-->
+                <div><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out-alt"></i></a></div>
             </div>
         </div>
     </div>
@@ -64,31 +69,29 @@
     {% block center-content %}{% endblock center-content %}
 
 
-
-
     <!-- ---------------------------------------------------------- -->
 
     <div class="profile-display">
         <div class="profile-s">
-            <img src="{% static 'images/sara_beaty.jpg' %}" alt="">
-            <div class="username">Sara hardi</div>
-            <div class="user-email">sara_pino45@gmail.com</div>
+            <a href="{% url 'accounts:user_profile' request.user.id %}"><img src="{{ request.user.image.url }}" alt=""></a>
+            <div class="username">{{ request.user.username }}</div>
+            <div class="user-email">{{ request.user.email }}</div>
             <div class="count-f-f-p">
                 <div>
-                    <p>12</p>
+                    <p>{{ request.user.get_follower_count }}</p>
                     <p class="p2">Follower</p>
                 </div>
                 <div>
-                    <p>7</p>
+                    <p>{{ request.user.get_posts_count }}</p>
                     <p class="p2">Posts</p>
                 </div>
                 <div>
-                    <p>32</p>
+                    <p>{{ request.user.get_following_count }}</p>
                     <p class="p2">Following</p>
                 </div>
             </div>
             <div class="extra-button">
-                <p><i class="fas fa-edit"></i> Edit profile</p>
+                <a href="{% url 'accounts:edit_profile' request.user.id %}"><p><i class="fas fa-edit"></i> Edit profile</p></a>
             </div>
         </div>
         <div class="extra-content">
