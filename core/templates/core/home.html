@@ -1,24 +1,125 @@
-{% extends 'base.html' %}
-{% block main-content %}
-
-
-        <form action="" method="get">
-            {{ search_form }}
-            <input type="submit" value="search" style="float:right; margin-top:-70px;">
-        </form><br>
-        <div class="card">
-            {% if post %}
-                {% for post in post %}
-            <div class="card" style="margin:16px;">
-                    <a href="{% url 'accounts:user_profile' post.user.id %}" style="text-decoration:none; font-size:20px; background-color:lavender;" class="card-body">{{ post.user }}</a>
-                    <a href="{{ post.get_absolute_url }}" class="card-body">{{ post.body|truncatewords:5 }}</a>
-                    <small class="card-body" style="margin-top:-30px; color:#C0C0C0; font-size:12px; ">{{ post.created_at|date:"D j M o" }}</small>
-            </div>
-                {% empty %}
-                    <p>list is empty...</p>
-                {% endfor %}
-            {% endif %}
+{% extends 'new_base.html' %}
+{% block center-content %}
+    {% load static %}
+    <div class="center-content">
+        <div class="search-form">
+            <form action="" method="get">
+                <input type="text" placeholder="Search anything ...">
+                <input type="submit" value="search">
+            </form>
         </div>
+        <div class="banner-and-posts">
+            <div class="main-banner">
+                <img src="{% static 'images/mainbanner.jpg' %}" alt="">
+                <div class="landing-button">
+                    <h3>this is new blog... You should read</h3>
+                    <div>
+                        <button class="btn-fill">Read</button>
+                        <button class="btn-border">Save</button>
+                    </div>
+                </div>
+            </div>
 
+            <div class="posts-lists">
+                {% if post %}
+                    {% for post in post %}
+                        <div class="post-display">
+                            <div class="main-user-info">
 
-{% endblock %}
+                                {% if post.user.image %}
+                                    <img src="{{ post.user.image.url }}" alt="">
+                                {% else %}
+                                    <img  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                                    alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2">
+                                {% endif %}
+
+                                <p>{{ post.user.username }}</p>
+
+                                {% if not request.user.is_following %}
+                                    <a class="follow-button" href="{% url 'accounts:follow' post.user.id %}">Follow</a>
+                                {% else %}
+                                    <a class="follow-button" href="{% url 'accounts:unfollow' post.user.id %}">Unfollow</a>
+                                {% endif %}
+
+                            </div>
+                            <div class="post-caption">
+
+                                <p>{{ post.body|slice:":300" }}
+                                    {% if post.body|length >= 300 %}
+                                        <span id="dots-{{post.id}}">...</span>
+                                        <span class="more-caption" id="more-{{post.id}}">{{ post.body|slice:"300:" }}</span>
+                                        <button onclick="myFunction({{post.id}})" id="myBtn-{{post.id}}">Read more</button></p>
+                                    {% endif %}
+                            </div>
+                            <div class="post-image">
+                                {% if post.image %}
+                                <img src="{{ post.image.url }}">
+                                {% endif %}
+                            </div>
+
+                            <div class="like-comment-counts">
+                                <a href="">2,730 likes</a>
+                                <a href="">32 comments</a>
+                                <a href="">{{ post.created_at|date:"D j M o"}}</a>
+
+                            </div>
+
+                            <div class="like-comment-save-share">
+                                <div class="left-like">
+                                    <a href=""><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                    <a href=""><i class="fa fa-comment-o" aria-hidden="true"></i></a>
+                                    <!-- <a href=""><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a> -->
+                                </div>
+                                <div class="right-save">
+                                    <a href=""><i class="fa fa-bookmark-o" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <div class="post-display">
+                    <div class="main-user-info">
+                        <img src="{% static 'images/sara_beaty.jpg' %}" alt="">
+                        <p>Bahador eskandari</p>
+                        <a class="follow-button">Follow</a>
+                    </div>
+                    <div class="post-caption">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                             Phasellus imperdiet, nulla et dictum interdum
+                             , nisi lorem egestas vitae scel<span id="dots-10000">...</span><span class="more-caption" id="more-10000">
+                                erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget,
+                                 auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi,
+                                  sed ullamcorper ipsum dignissim ac.
+                                  In at libero sed nunc venenatis imperdiet sed
+                                  ornare turpis. Donec vitae dui eget tellus gravida
+                                   venenatis. Integer fringilla congue eros non fermentum.
+                                   Sed dapibus pulvinar nibh tempor porta.</span><button onclick="myFunction(10000)" id="myBtn-10000">Read more</button></p>
+                    </div>
+                    <div class="post-image">
+                        <!-- <img src="main-banner.avif" alt=""> -->
+                    </div>
+
+                    <div class="like-comment-counts">
+                        <a href="">2,730 likes</a>
+                        <a href="">32 comments</a>
+                        <a href="">{{ post.created_at|timesince }} ago</a>
+
+                    </div>
+
+                    <div class="like-comment-save-share">
+                        <div class="left-like">
+                            <a href=""><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                            <a href=""><i class="fa fa-comment-o" aria-hidden="true"></i></a>
+                            <!-- <a href=""><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a> -->
+                        </div>
+                        <div class="right-save">
+                            <a href=""><i class="fa fa-bookmark-o" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock center-content %}

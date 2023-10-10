@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block main-content %}
+
+
+        <form action="" method="get">
+            {{ search_form }}
+            <input type="submit" value="search" style="float:right; margin-top:-70px;">
+        </form><br>
+        <div class="card">
+            {% if post %}
+                {% for post in post %}
+            <div class="card" style="margin:16px;">
+                    <a href="{% url 'accounts:user_profile' post.user.id %}" style="text-decoration:none; font-size:20px; background-color:lavender;" class="card-body">{{ post.user }}</a>
+                    <a href="{{ post.get_absolute_url }}" class="card-body">{{ post.body|truncatewords:5 }}</a>
+                    <small class="card-body" style="margin-top:-30px; color:#C0C0C0; font-size:12px; ">{{ post.created_at|date:"D j M o" }}</small>
+            </div>
+                {% empty %}
+                    <p>list is empty...</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+
+{% endblock %}

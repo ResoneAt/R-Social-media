@@ -1,12 +1,13 @@
-{% extends 'base.html' %}
-{% block main-content %}
+{% extends 'new_base.html' %}
+{% block center-content %}
+    <div class="center-content">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="save">
+            <a href="{% url 'accounts:user_profile' request.user.id %}" class="btn btn-warning">cancel</a>
+        </form>
+    </div>
 
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="save">
-        <a href="{% url 'accounts:user_profile' request.user.id %}" class="btn btn-warning">cancel</a>
-    </form>
-
-{% endblock main-content %}
+{% endblock center-content %}
 

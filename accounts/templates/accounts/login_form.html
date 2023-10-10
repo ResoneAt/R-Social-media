@@ -10,8 +10,7 @@
       <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.min.css">
    </head>
    <body>
-      <div class="bg-img" style="background:url(' {% static 'images/bg.jpg' %}'); background-size: cover; ')">
-    {% include 'include/messages.html' %}
+      <div class="bg-img">
          <div class="content">
             <header>Login</header>
             <form action="" method="POST" novalidate>
@@ -24,6 +23,11 @@
                   <span class="fa fa-lock"></span>
                   {{login_form.password}}
                </div>
+               <div class="signup" style='background:red;'>
+                  {% for error in login_form.errors %}
+                     {{error}}
+                  {% endfor %}
+               </div>
                <div class="pass">
                   <a href="{% url 'accounts:reset_password_form' %}">Forgot Password?</a>
                </div>
@@ -35,11 +39,11 @@
                Or login with
             </div>
             <div class="links">
-               <div class="facebook" style="background:black; border:black;">
-                  <i class="fab fa-github"><a href="{% provider_login_url 'github' %}"><span>Github</span></a></i>
+               <div class="facebook" style="background:gray; border:black;">
+                  <i class="fab fa-github"><a style="text-decoration:none; color:white;" href="{% provider_login_url 'github' %}"><span>Github</span></a></i>
                </div>
                <div class="instagram">
-                  <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"><span>Google</span></i></a>
+                  <a style="text-decoration:none; color:white;" href="{% provider_login_url 'google' %}"><i class="fab fa-google"><span>Google</span></i></a>
                </div>
             </div>
             <div class="signup">

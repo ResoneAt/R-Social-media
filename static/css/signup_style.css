@@ -7,7 +7,7 @@
   user-select: none;
 }
 .bg-img{
-  background: url('{% static 'images/bg.jpg' %}');
+  background-color:rgb(241, 241, 241);
   height: 100vh;
   background-size: cover;
   background-position: center;
@@ -19,7 +19,6 @@
   left: 0;
   height: 100%;
   width: 100%;
-  background: rgba(0,0,0,0.6);
 }
 .content{
   position: absolute;
@@ -30,8 +29,9 @@
   padding: 60px 32px;
   width: 370px;
   transform: translate(-50%,-50%);
-  background: rgba(255,255,255,0.08);
+  background: rgba(30,30,30);
   box-shadow: -1px 4px 28px 0px rgba(0,0,0,0.75);
+  border-radius: 16px;
 }
 
 .content header{
