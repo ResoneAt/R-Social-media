@@ -1,9 +1,12 @@
 from django import forms
 from .models import PostModel, CommentModel
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
+from ckeditor.widgets import CKEditorWidget
 
 
 class CreatePostForm(forms.ModelForm):
+    body = forms.CharField(widget=CKEditorWidget(config_name='awesome_ckeditor'))
+
     class Meta:
         model = PostModel
         fields = ['image', 'body', 'location']

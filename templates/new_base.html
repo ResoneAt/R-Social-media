@@ -73,7 +73,12 @@
 
     <div class="profile-display">
         <div class="profile-s">
+            {% if request.user.image %}
             <a href="{% url 'accounts:user_profile' request.user.id %}"><img src="{{ request.user.image.url }}" alt=""></a>
+            {% else %}
+            <a href="{% url 'accounts:user_profile' request.user.id %}"><img src="{% static 'images/avatar.png' %}" alt=""></a>
+            {% endif %}
+
             <div class="username">{{ request.user.username }}</div>
             <div class="user-email">{{ request.user.email }}</div>
             <div class="count-f-f-p">
