@@ -29,8 +29,7 @@
                                 {% if post.user.image %}
                                     <img src="{{ post.user.image.url }}" alt="">
                                 {% else %}
-                                    <img  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                                    alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2">
+                                    <img  src="{% static 'images/avatar.png' %}">
                                 {% endif %}
 
                                 <p>{{ post.user.username }}</p>
@@ -44,10 +43,10 @@
                             </div>
                             <div class="post-caption">
 
-                                <p>{{ post.body|slice:":300" }}
+                                <p>{{ post.body|safe|slice:":300" }}
                                     {% if post.body|length >= 300 %}
                                         <span id="dots-{{post.id}}">...</span>
-                                        <span class="more-caption" id="more-{{post.id}}">{{ post.body|slice:"300:" }}</span>
+                                        <span class="more-caption" id="more-{{post.id}}">{{ post.body|safe|slice:"300:" }}</span>
                                         <button onclick="myFunction({{post.id}})" id="myBtn-{{post.id}}">Read more</button></p>
                                     {% endif %}
                             </div>

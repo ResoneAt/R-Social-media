@@ -540,7 +540,7 @@ li.logout a:hover{
 }
 .profile-s img{
     margin-top: 32px;
-    width: 30%;
+    width: 100px;
     height: auto;
     border-radius: 50%;
     /* border: solid;

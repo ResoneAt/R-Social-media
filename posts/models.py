@@ -6,11 +6,14 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from .manager import MyPostModelManager
 from django.db.models.manager import Manager
+from ckeditor.fields import RichTextField
 
 
 class PostModel(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
-    body = models.TextField(help_text='Please write caption')
+    # body = models.TextField(help_text='Please write caption')
+    body = RichTextField()
+
     image = models.ImageField(upload_to='posts',blank=True, null=True, help_text='Please upload your image')
     location = models.CharField(max_length=730, blank=True, null=True,
                                 help_text='You can write the location of this post')

@@ -32,6 +32,14 @@
   background: rgba(30,30,30);
   box-shadow: -1px 4px 28px 0px rgba(0,0,0,0.75);
   border-radius: 16px;
+  animation-name: sign-background-anime;
+  animation-duration: 73s;
+  animation-iteration-count: infinite;
+}
+@keyframes sign-background-anime {
+    0%   {background-color: rgb(34, 34, 34);}
+    25%  {background-color: rgb(133, 133, 133);}
+    100% {background-color: rgb(58, 58, 58);}
 }
 
 .content header{
@@ -42,6 +50,7 @@
   font-family: 'Montserrat',sans-serif;
 }
 .field{
+  border-radius:12px;
   position: relative;
   height: 45px;
   width: 100%;
@@ -100,6 +109,7 @@
   font-weight: 600;
   cursor: pointer;
   font-family: 'Montserrat',sans-serif;
+  border-radius:12px;
 }
 .field input[type="submit"]:hover{
   background: #2691d9;
@@ -116,6 +126,7 @@
   margin: 0 0 20px 0;
 }
 .facebook,.instagram{
+    border-radius:12px;
   width: 100%;
   height: 45px;
   line-height: 45px;
