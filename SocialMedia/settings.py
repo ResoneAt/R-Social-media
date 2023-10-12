@@ -35,16 +35,12 @@ CSRF_COOKIE_SECURE = True
 
 AUTH_USER_MODEL = 'accounts.User'
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+LOCAL_APPS = [
     'core.apps.CoreConfig',
     'accounts.apps.AccountsConfig',
-    'posts.apps.PostsConfig',
+    'posts.apps.PostsConfig'
+]
+THIRD_PARTY_APPS = [
     'debug_toolbar',
     'allauth',
     'allauth.account',
@@ -52,9 +48,19 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'ckeditor',
-    'ckeditor_uploader',
-
+    'ckeditor_uploader'
 ]
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    *LOCAL_APPS,
+    *THIRD_PARTY_APPS,
+]
+
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
 CKEDITOR_CONFIGS = {
@@ -62,7 +68,9 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'Custom',
         'toolbar_Custom': [
             ['Bold', 'Italic', 'Underline'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent',
+             'Indent', '-', 'JustifyLeft', 'JustifyCenter',
+             'JustifyRight', 'JustifyBlock'],
             ['Link', 'Unlink'],
             ['RemoveFormat', 'Source']
         ]
