@@ -2,13 +2,14 @@ from django.utils.deprecation import MiddlewareMixin
 
 
 class CustomMiddleware(MiddlewareMixin):
-    def process_template_response(self, request, response):
-        custom_data = {
-            'key1': 'value1',
-            'key2': 'value2',
-        }
-        print('helooooooooooooooooooooooooooooooooooooooooooooooooooooooooo')
-        response.context_data['custom_data'] = custom_data
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        from accounts.models import User
+        users = User.objects.all().order_by('?')
+        request.project_context = {'users': users}
+        response = self.get_response(request)
         return response
 
 
