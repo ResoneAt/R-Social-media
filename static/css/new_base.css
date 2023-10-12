@@ -354,8 +354,8 @@ li.logout a:hover{
     border-bottom: solid 1px rgba(103, 103, 103, 0.145);
 }
 .main-user-info img{
-    height: 60px;
-    width: 60px;
+    height: 55px;
+    width: 55px;
     position: relative;
     border-radius: 50%;
     margin-left: 24px;
@@ -364,7 +364,7 @@ li.logout a:hover{
 }
 .main-user-info p{
     margin-left: 16px;
-    font-size: larger;
+    font-size: 24px;
     display: inline;
 
 }

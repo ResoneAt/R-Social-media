@@ -140,6 +140,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "core.middleware.middleware.CustomMiddleware",
 ]
 
 ROOT_URLCONF = 'SocialMedia.urls'

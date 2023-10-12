@@ -70,11 +70,7 @@
                                 <a class="follow-button">Follow</a>
                             </div>
                             <div class="post-caption">
-                                <p>{{ post.body|safe|slice:":300" }}
-                                    {% if post.body|length >= 300 %}
-                                        <span id="dots-{{post.id}}">...</span>
-                                        <span class="more-caption" id="more-{{post.id}}">{{ post.body|safe|slice:"300:" }}</span>
-                                        <button onclick="myFunction({{post.id}})" id="myBtn-{{post.id}}">Read more</button></p>
+                                <p>{{ post.body|safe|slice:":300" }}{% if post.body|length >= 300 %}<span id="dots-{{post.id}}">...</span><span class="more-caption" id="more-{{post.id}}">{{ post.body|safe|slice:"300:" }}</span><button onclick="myFunction({{post.id}})" id="myBtn-{{post.id}}">Read more</button></p>
                                     {% endif %}
                             </div>
                             <div class="post-image">
@@ -84,9 +80,9 @@
                             </div>
 
                             <div class="like-comment-counts">
-                                <a href="">2,730 likes</a>
-                                <a href="">32 comments</a>
-                                <a href="">3 hours ago</a>
+                                <a href="">{{ post.like_count }} likes</a>
+                                <a href="">{{ post.comment_count }} comments</a>
+                                <a href="">{{ post.created_at|date:"D j M o"}}</a>
                             </div>
 
                             <div class="like-comment-save-share">
