@@ -30,6 +30,16 @@
             </ul>
             <ul class="logout-settings">
 <!--                <li class="settings"><a href="#"><i class="fa fa-cog"></i> Settings</a></li>-->
+                <li>
+                  <div class="music-player">
+                    <div class="player-controls">
+                      <button class="previous-button"><i class="fa-solid fa-backward-step"></i></button>
+                      <button class="play-pause-button">Play Music  <i class="fa-solid fa-music"></i></button>
+                      <button class="next-button"><i class="fa-solid fa-forward-step"></i></button>
+                    </div>
+                  </div>
+                </li>
+                <audio id="background-music" src="" preload="auto"></audio>
                 <li class="logout"><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>
@@ -100,46 +110,22 @@
             </div>
         </div>
         <div class="extra-content">
-            <div class="Recommended-user">
-                <img class="user-image" src="itit.png" alt="">
-                <div class="user-info">
-                    <p class="recomended-username">Raminesami</p>
-                    <p class="recomended-user-email">eslamiramin85@gmail.com</p>
-                </div>
-                <a class="follow-button">Follow</a>
-            </div>
-            <div class="Recommended-user">
-                <img class="user-image" src="professional-boy-image-generator-ben-zoeller-xhshz.webp" alt="">
-                <div class="user-info">
-                    <p class="recomended-username">Raminesami</p>
-                    <p class="recomended-user-email">eslamiramin85@gmail.com</p>
-                </div>
-                <a class="follow-button">Follow</a>
-            </div>
-            <div class="Recommended-user">
-                <img class="user-image" src="ein-schwuler-junger-mann-nackt-skzzvz.webp" alt="">
-                <div class="user-info">
-                    <p class="recomended-username">Raminesami</p>
-                    <p class="recomended-user-email">eslamiramin85@gmail.com</p>
-                </div>
-                <a class="follow-button">Follow</a>
-            </div>
-            <div class="Recommended-user">
-                <img class="user-image" src="{% static 'images/sara_beaty.jpg' %}" alt="">
-                <div class="user-info">
-                    <p class="recomended-username">Raminesami</p>
-                    <p class="recomended-user-email">eslamiramin85@gmail.com</p>
-                </div>
-                <a class="follow-button">Follow</a>
-            </div>
-            <div class="Recommended-user">
-                <img class="user-image" src="images.jpeg" alt="">
-                <div class="user-info">
-                    <p class="recomended-username">Raminesami</p>
-                    <p class="recomended-user-email">eslamiramin85@gmail.com</p>
-                </div>
-                <a class="follow-button">Follow</a>
-            </div>
+            {% for user in request.project_context.users %}
+                {% if user != request.user %}
+                    <div class="Recommended-user">
+                        {% if user.image %}
+                            <img class="user-image" src="{{ user.image.url }}" alt="">
+                        {% else %}
+                            <img src="{% static 'images/avatar.png' %}">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="recomended-username">{{ user.username }}</p>
+                            <p class="recomended-user-email">{{ user.email }}</p>
+                        </div>
+                        <a class="follow-button">Follow</a>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
     <script src="https://kit.fontawesome.com/24abe8aec2.js" crossorigin="anonymous"></script>
@@ -159,6 +145,67 @@
             moreText.style.display = "inline";
         }
         }
+
         </script>
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              var audio = document.getElementById('background-music');
+              var previousButton = document.querySelector('.previous-button');
+              var playPauseButton = document.querySelector('.play-pause-button');
+              var nextButton = document.querySelector('.next-button');
+              var songs = [
+                '{% static 'music/lofi2.mp3' %}',
+                '{% static 'music/lofi3.mp3' %}',
+              ];
+
+              var currentSongIndex = 0;
+              var isPlaying = false;
+
+              function playCurrentSong() {
+                audio.src = songs[currentSongIndex];
+                audio.play();
+                isPlaying = true;
+                playPauseButton.textContent = 'Pause';
+              }
+
+              function pauseCurrentSong() {
+                audio.pause();
+                isPlaying = false;
+                playPauseButton.textContent = 'Play';
+              }
+
+              previousButton.addEventListener('click', function() {
+                currentSongIndex--;
+                if (currentSongIndex < 0) {
+                  currentSongIndex = songs.length - 1;
+                }
+                playCurrentSong();
+              });
+
+              playPauseButton.addEventListener('click', function() {
+                if (isPlaying) {
+                  pauseCurrentSong();
+                } else {
+                  playCurrentSong();
+                }
+              });
+
+              nextButton.addEventListener('click', function() {
+                currentSongIndex++;
+                if (currentSongIndex >= songs.length) {
+                  currentSongIndex = 0;
+                }
+                playCurrentSong();
+              });
+
+              audio.addEventListener('ended', function() {
+                currentSongIndex++;
+                if (currentSongIndex >= songs.length) {
+                  currentSongIndex = 0;
+                }
+                playCurrentSong();
+              });
+            });
+          </script>
 </body>
 </html>

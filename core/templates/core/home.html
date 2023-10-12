@@ -12,7 +12,7 @@
             <div class="main-banner">
                 <img src="{% static 'images/mainbanner.jpg' %}" alt="">
                 <div class="landing-button">
-                    <h3>this is new blog... You should read</h3>
+                    <h3>this is new blog... You should read {% for user in users %} {{ user.username }} {% endfor %}</h3>
                     <div>
                         <button class="btn-fill">Read</button>
                         <button class="btn-border">Save</button>
@@ -32,7 +32,7 @@
                                     <img  src="{% static 'images/avatar.png' %}">
                                 {% endif %}
 
-                                <p>{{ post.user.username }} {{ custom_data.key1 }}</p>
+                                <p>{{ post.user.username }}</p>
 
                                 {% if not request.user.is_following %}
                                     <a class="follow-button" href="{% url 'accounts:follow' post.user.id %}">Follow</a>

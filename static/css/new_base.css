@@ -128,7 +128,34 @@ li.logout a:hover{
     background-color: rgb(255, 4, 4);
     color: rgb(255, 255, 255);
 }
+    .music-player {
+      text-align: center;
+      direction:column;
+      display:flex;
+      flex-direction:column;
+    }
 
+    .player-controls {
+    }
+
+    .previous-button,
+    .next-button,
+    .play-pause-button {
+      padding: 4px 8px;
+      font-size: 10px;
+      background-color: black;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 1px;
+    }
+
+    .previous-button:hover,
+    .next-button:hover,
+    .play-pause-button:hover {
+      background-color: #0039e6;
+    }
 @media only screen and (max-width: 1330px) {
     .navigation{
         background-color:rgb(252, 254, 255);
@@ -648,7 +675,7 @@ li.logout a:hover{
 }
 .Recommended-user img{
     width: 40px;
-    height: auto;
+    height: 40px;
     border-radius: 50%;
     margin-right: 12px;
 }
