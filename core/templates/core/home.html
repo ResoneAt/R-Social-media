@@ -32,7 +32,7 @@
                                     <img  src="{% static 'images/avatar.png' %}">
                                 {% endif %}
 
-                                <p>{{ post.user.username }}</p>
+                                <p>{{ post.user.username }} {{ custom_data.key1 }}</p>
 
                                 {% if not request.user.is_following %}
                                     <a class="follow-button" href="{% url 'accounts:follow' post.user.id %}">Follow</a>
@@ -42,11 +42,7 @@
 
                             </div>
                             <div class="post-caption">
-
-                                <p>{{ post.body|safe|slice:":300" }}
-                                    {% if post.body|length >= 300 %}
-                                        <span id="dots-{{post.id}}">...</span>
-                                        <span class="more-caption" id="more-{{post.id}}">{{ post.body|safe|slice:"300:" }}</span>
+                                <p>{{ post.body|safe|slice:":300" }}{% if post.body|length >= 300 %}<span id="dots-{{post.id}}">...</span><span class="more-caption" id="more-{{post.id}}">{{ post.body|safe|slice:"300:" }}</span>
                                         <button onclick="myFunction({{post.id}})" id="myBtn-{{post.id}}">Read more</button></p>
                                     {% endif %}
                             </div>
@@ -57,10 +53,9 @@
                             </div>
 
                             <div class="like-comment-counts">
-                                <a href="">2,730 likes</a>
-                                <a href="">32 comments</a>
+                                <a href="">{{ post.like_count }} likes</a>
+                                <a href="">{{ post.comment_count }} comments</a>
                                 <a href="">{{ post.created_at|date:"D j M o"}}</a>
-
                             </div>
 
                             <div class="like-comment-save-share">
@@ -76,46 +71,6 @@
                         </div>
                     {% endfor %}
                 {% endif %}
-                <div class="post-display">
-                    <div class="main-user-info">
-                        <img src="{% static 'images/sara_beaty.jpg' %}" alt="">
-                        <p>Bahador eskandari</p>
-                        <a class="follow-button">Follow</a>
-                    </div>
-                    <div class="post-caption">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                             Phasellus imperdiet, nulla et dictum interdum
-                             , nisi lorem egestas vitae scel<span id="dots-10000">...</span><span class="more-caption" id="more-10000">
-                                erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget,
-                                 auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi,
-                                  sed ullamcorper ipsum dignissim ac.
-                                  In at libero sed nunc venenatis imperdiet sed
-                                  ornare turpis. Donec vitae dui eget tellus gravida
-                                   venenatis. Integer fringilla congue eros non fermentum.
-                                   Sed dapibus pulvinar nibh tempor porta.</span><button onclick="myFunction(10000)" id="myBtn-10000">Read more</button></p>
-                    </div>
-                    <div class="post-image">
-                        <!-- <img src="main-banner.avif" alt=""> -->
-                    </div>
-
-                    <div class="like-comment-counts">
-                        <a href="">2,730 likes</a>
-                        <a href="">32 comments</a>
-                        <a href="">{{ post.created_at|timesince }} ago</a>
-
-                    </div>
-
-                    <div class="like-comment-save-share">
-                        <div class="left-like">
-                            <a href=""><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                            <a href=""><i class="fa fa-comment-o" aria-hidden="true"></i></a>
-                            <!-- <a href=""><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a> -->
-                        </div>
-                        <div class="right-save">
-                            <a href=""><i class="fa fa-bookmark-o" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         </div>
