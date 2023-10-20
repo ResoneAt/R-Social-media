@@ -12,6 +12,7 @@ Resonegram is a social media project that allows users to freely publish their p
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
+- [Contributions](#contributions)
 
 ## Getting Started
 
@@ -65,5 +66,6 @@ We would like to thank the following individuals and organizations for their con
     SepehrBazyar
     mongard
 
+## Contributions
 
 ![Alt](https://repobeats.axiom.co/api/embed/39de15f2b1d3622ff08fec6db97ab22fc03ef9f2.svg "Repobeats analytics image")
