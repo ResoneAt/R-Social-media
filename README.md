@@ -1,5 +1,7 @@
 # Resonegram
 
+  <img src="Resonegram.png" alt="Resonegram-banner">
+
 Resonegram is a social media project that allows users to freely publish their posts, leave comments, and like other people's posts. It also provides a chat system for users to communicate with each other. Users can sign up for Resonegram using their Google or GitHub account, and the project includes a password recovery system.
 
 ## Table of Contents
