@@ -1,11 +1,66 @@
 {% extends 'new_base.html' %}
 {% block center-content %}
-    <div class="center-content">
+    <div class="center-content edit-profile-fields">
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="save">
-            <a href="{% url 'accounts:user_profile' request.user.id %}" class="btn btn-warning">cancel</a>
+            <div>
+                <h3>Privacy information</h3>
+                <div class="username-field">
+                    {{ form.username.label }}
+                    {{ form.username }}
+                </div>
+
+                <div>
+                    {{ form.email.label }}
+                    {{ form.email }}
+                </div>
+                <div>
+                    {{ form.account_type.label }}
+                    {{ form.account_type }}
+                </div>
+
+                <div>
+                    {{ form.phone_number.label }}
+                    {{ form.phone_number }}
+                </div>
+            </div>
+
+            <div>
+                <h3>Public information</h3>
+                <div>
+                    {{ form.image.label }}
+                    {{ form.image }}
+                </div>
+                <div>
+                    {{ form.first_name.label }}
+                    {{ form.first_name }}
+                </div>
+
+                <div>
+                    {{ form.last_name.label }}
+                    {{ form.last_name }}
+                </div>
+                <div>
+                    {{ form.gender.label }}
+                    {{ form.gender }}
+                </div>
+                <div>
+                    {{ form.bio.label }}
+                    {{ form.bio }}
+                </div>
+
+                <div>
+                    {{ form.date_of_birth.label }}
+                    {{ form.date_of_birth }}
+                </div>
+            </div>
+
+
+            <p class="save-cancel">
+                <input class="submit-input" type="submit" value="save">
+                <a href="{% url 'accounts:user_profile' request.user.id %}" class="cancel-input">cancel</a>
+            </p>
+
         </form>
     </div>
 

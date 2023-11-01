@@ -12,7 +12,7 @@
             <div class="main-banner">
                 <img src="{% static 'images/mainbanner.jpg' %}" alt="">
                 <div class="landing-button">
-                    <h3>this is new blog... You should read {% for user in users %} {{ user.username }} {% endfor %}</h3>
+                    <h3>this is new blog... You should read</h3>
                     <div>
                         <button class="btn-fill">Read</button>
                         <button class="btn-border">Save</button>
@@ -27,18 +27,17 @@
                             <div class="main-user-info">
 
                                 {% if post.user.image %}
-                                    <img src="{{ post.user.image.url }}" alt="">
+                                    <a href="{% url 'accounts:user_profile' post.user.id %}"><img src="{{ post.user.image.url }}" alt=""></a>
                                 {% else %}
-                                    <img  src="{% static 'images/avatar.png' %}">
+                                    <a href="{% url 'accounts:user_profile' post.user.id %}"><img  src="{% static 'images/avatar.png' %}"></a>
                                 {% endif %}
 
-                                <p>{{ post.user.username }}</p>
-
-                                {% if not request.user.is_following %}
-                                    <a class="follow-button" href="{% url 'accounts:follow' post.user.id %}">Follow</a>
-                                {% else %}
-                                    <a class="follow-button" href="{% url 'accounts:unfollow' post.user.id %}">Unfollow</a>
-                                {% endif %}
+                                <a href="{% url 'accounts:user_profile' post.user.id %}"><p>{{ post.user.username }}</p></a>
+<!--                                {% if not is_following %}-->
+<!--                                    <a class="follow-button" href="{% url 'accounts:follow' post.user.id %}">Follow</a>-->
+<!--                                {% else %}-->
+<!--                                    <a class="follow-button" href="{% url 'accounts:unfollow' post.user.id %}">Unfollow</a>-->
+<!--                                {% endif %}-->
 
                             </div>
                             <div class="post-caption">

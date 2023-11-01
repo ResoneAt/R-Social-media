@@ -10,6 +10,9 @@ body{
     height:100%;
     width:100%;
 }
+a{
+    text-decoration:none;
+}
 /* ------------------------------ Start Navigation -----------------------------*/
 .navigation{
     background-color:rgb(252, 254, 255);
@@ -394,13 +397,13 @@ li.logout a:hover{
     margin-left: 16px;
     font-size: 24px;
     display: inline;
-
 }
 
 .main-user-info a{
-    margin-left: 16px;
+    margin-left: 0px;
     display: inline;
-
+    text-decoration:none;
+    color:black;
 }
 
 .post-caption{
@@ -682,7 +685,7 @@ li.logout a:hover{
 .recomended-username{
     font-size: 20px;
 }
-.follow-button{
+.see-profile-button{
     font-size: 13px;
     position: relative;
     padding: 8px 12px;
@@ -695,8 +698,9 @@ li.logout a:hover{
     border-style: solid;
     color: rgb(0, 0, 0);
     cursor: pointer;
+    text-decoration:none;
 }
-.follow-button:hover{
+.see-profile-button:hover{
     background-color: rgba(129, 251, 255, 0.323);
     color: rgb(31, 31, 31);
 }

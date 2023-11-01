@@ -129,6 +129,17 @@
     justify-content: center;
     text-align: center;
 }
+.empty-profile{
+    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background-color:rgb(252, 254, 255);
+    height: 100px;
+    width: 100%;
+    border-radius: 16px;
+}
+
 .posts-headers h2{
     padding-top: 9px;
     display: block;

@@ -42,9 +42,33 @@
             </div>
 
             <div class="profile-follow-message-btn">
-                <a class="profile-follow-button">Follow</a>
-                <a class="profile-message-button">Message</a>
-                <a class="profile-options-button"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                {% if request.user == user %}
+                    <a class="profile-follow-button" href="{% url 'posts:create_post' %}">Create Post</a>
+                    <a class="profile-message-button" href="{% url 'accounts:edit_profile' request.user.id %}">Edit Profile</a>
+<!--                    <a class="profile-options-button"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>-->
+                {% else %}
+                    {% if user.account_type == 'public' %}
+                        {% if not is_following %}
+                            <a class="profile-follow-button" href="{% url 'accounts:follow' user.id %}">Follow</a>
+                        {% else %}
+                            <a class="profile-follow-button" href="{% url 'accounts:unfollow' user.id %}">Unfollow</a>
+                        {% endif %}
+                            <a class="profile-message-button" href="{% url 'accounts:message' user.id %}">Message</a>
+                            <a class="profile-options-button"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                    {% else %}
+                        {% if not is_following %}
+                            {% if not is_follow_requesting %}
+                                <a class="profile-follow-button" href="{% url 'accounts:follow_request' user.id %}">Follow</a>
+                            {% else %}
+                                <a class="profile-follow-button">Pending</a>
+                            {% endif %}
+                        {% else %}
+                            <a class="profile-follow-button" href="{% url 'accounts:unfollow' user.id %}">Unfollow</a>
+                        {% endif %}
+                            <a class="profile-message-button" href="{% url 'accounts:message' user.id %}">Message</a>
+                            <a class="profile-options-button"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                    {% endif %}
+                {% endif %}
 
             </div>
 
@@ -97,7 +121,9 @@
                             </div>
                         </div>
                     {% empty %}
-                                    <p>post list is empty...</p>
+                        <div class="empty-profile">
+                            <p>This profile don't have any post...</p>
+                        </div>
                     {% endfor %}
             </div>
 

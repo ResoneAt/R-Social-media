@@ -1,0 +1,79 @@
+.edit-profile-fields h3{
+    color:white;
+    width:100%;
+    margin-top:0px;
+    padding-top:8px;
+    padding-bottom:8px;
+    padding-left:28px;
+    border-radius:8px;
+    background-color: rgb(19, 19, 19);
+}
+
+.edit-profile-fields div{
+    margin: 20px;
+    width: 93%;
+    min-height:40px;
+    border-radius: 8px;
+    background-color:rgb(252, 254, 255);
+    padding:8px;
+    display:flex;
+    align-items:center;
+    flex-flow: wrap;
+
+}
+.edit-profile-fields div label{
+    margin-left:16px;
+    color:rgb(0, 0, 0);
+    /* background-color: rgb(100, 100, 100); */
+    padding:4px 8px;
+    border-radius:8px;
+}
+.edit-profile-fields div input{
+    background-color:rgb(252, 254, 250);
+    /* border-radius:6px; */
+    border-width:1px;
+    border: none;
+    border-bottom: solid 1px black;
+    margin-left:8px;
+    height:22px;
+}
+.edit-profile-fields div span{
+    font-size:14px;
+    color:gray;
+    position: relative;
+    display: block;
+}
+.save-cancel{
+    margin-top:-24px;
+}
+.submit-input{
+    margin: 20px;
+    width: 50%;
+    background-color: rgb(117, 255, 191);
+    border:none;
+    height:44px;
+    border-radius:7px;
+
+}
+.cancel-input{
+    background-color: rgb(252, 254, 255);
+    text-decoration: none;
+    margin:5px 0px;
+    height:44px;
+    color:black;
+    padding: 13px 54px;
+    border-radius:7px;
+
+}
+@media only screen and (max-width: 950px) {
+.edit-profile-fields div{
+    width: 85%;
+    min-height:40px;
+    border-radius: 8px;
+    background-color:rgb(252, 254, 255);
+    display:flex;
+    align-items:center;
+    flex-flow: wrap;
+
+}
+}

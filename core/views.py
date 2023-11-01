@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.views.generic import View
 from posts.models import PostModel
 from .forms import SearchForm
+from django.db import models
 from django.contrib.auth.mixins import LoginRequiredMixin
+from accounts.models import User
 # Create your views here.
 
 
