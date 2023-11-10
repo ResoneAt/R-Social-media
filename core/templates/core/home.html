@@ -59,9 +59,14 @@
 
                             <div class="like-comment-save-share">
                                 <div class="left-like">
-                                    <a href=""><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                    {% if post.is_like %}
+                                        <a href="{% url 'posts:dislike_post' post.id %}"><i class="fa fa-heart" aria-hidden="true"></i></a>
+                                    {% else %}
+                                        <a href="{% url 'posts:like_post' post.id %}"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                    {% endif %}
+
                                     <a href=""><i class="fa fa-comment-o" aria-hidden="true"></i></a>
-                                    <!-- <a href=""><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a> -->
+                                    <a href=""><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
                                 </div>
                                 <div class="right-save">
                                     <a href=""><i class="fa fa-bookmark-o" aria-hidden="true"></i></a>
