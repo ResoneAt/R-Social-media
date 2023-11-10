@@ -1,8 +1,17 @@
 {% if messages %}
 
     {% for msg in messages %}
-        <p class="del-msg alert alert-{{ msg.tags }}" style="z-index:1000;
-           top:70px;" >{{ msg }}</p>
+        <p class="del-msg alert alert-{{ msg.tags }}" style="
+        z-index:1000;
+        top:10px;
+        position:absolute;
+        background:black;
+        color:white;
+        padding:8px;
+        border-radius:7px;
+        opacity:30%;
+        font-size:14px;
+" >{{ msg }}</p>
     {% endfor %}
 
 {% endif %}

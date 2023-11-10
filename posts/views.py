@@ -21,7 +21,7 @@ class CreatePostView(View):
         if form.is_valid():
             post = form.save(commit=False)
             post.user = request.user
-            post.slug = slugify(form.cleaned_data['body'][:30])
+            post.slug = slugify(form.cleaned_data['body'][:73])
             post.save()
 
             messages.success(request, 'your post is create successfully', 'success')

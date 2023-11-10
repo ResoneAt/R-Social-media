@@ -95,6 +95,7 @@ class ProfileView(LoginRequiredMixin, View):
         user = get_object_or_404(User, pk=user_id, is_active=True)
         is_following = User.is_following(request.user, user_id)
         is_follow_requesting = User.is_follow_requesting(request.user, user_id)
+
         context = {
             "is_follow_requesting": is_follow_requesting,
             "is_following": is_following,

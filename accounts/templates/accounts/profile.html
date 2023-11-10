@@ -42,9 +42,33 @@
             </div>
 
             <div class="profile-follow-message-btn">
-                <a class="profile-follow-button">Follow</a>
-                <a class="profile-message-button">Message</a>
-                <a class="profile-options-button"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                {% if request.user == user %}
+                    <a class="profile-follow-button" href="{% url 'posts:create_post' %}">Create Post</a>
+                    <a class="profile-message-button" href="{% url 'accounts:edit_profile' request.user.id %}">Edit Profile</a>
+<!--                    <a class="profile-options-button"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>-->
+                {% else %}
+                    {% if user.account_type == 'public' %}
+                        {% if not is_following %}
+                            <a class="profile-follow-button" href="{% url 'accounts:follow' user.id %}">Follow</a>
+                        {% else %}
+                            <a class="profile-follow-button" href="{% url 'accounts:unfollow' user.id %}">Unfollow</a>
+                        {% endif %}
+                            <a class="profile-message-button" href="{% url 'accounts:message' user.id %}">Message</a>
+                            <a class="profile-options-button"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                    {% else %}
+                        {% if not is_following %}
+                            {% if not is_follow_requesting %}
+                                <a class="profile-follow-button" href="{% url 'accounts:follow_request' user.id %}">Follow</a>
+                            {% else %}
+                                <a class="profile-follow-button">Pending</a>
+                            {% endif %}
+                        {% else %}
+                            <a class="profile-follow-button" href="{% url 'accounts:unfollow' user.id %}">Unfollow</a>
+                        {% endif %}
+                            <a class="profile-message-button" href="{% url 'accounts:message' user.id %}">Message</a>
+                            <a class="profile-options-button"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                    {% endif %}
+                {% endif %}
 
             </div>
 
@@ -57,25 +81,31 @@
 
             <div class="profile-posts-lists">
                     {% for post in user.get_posts %}
-                        <div class="post-display">
+                         <div class="post-display">
                             <div class="main-user-info">
 
-                                {% if user.image %}
-                                    <img src="{{ user.image.url }}" alt="">
+                                {% if post.user.image %}
+                                    <a href="{% url 'accounts:user_profile' post.user.id %}"><img src="{{ post.user.image.url }}" alt=""></a>
                                 {% else %}
-                                    <img  src="{% static 'images/avatar.png' %}">
+                                    <a href="{% url 'accounts:user_profile' post.user.id %}"><img  src="{% static 'images/avatar.png' %}"></a>
                                 {% endif %}
 
-                                <p>{{ user.username }}</p>
-                                <a class="follow-button">Follow</a>
+                                <a href="{% url 'accounts:user_profile' post.user.id %}"><p>{{ post.user.username }}</p></a>
+                <!--                    {% if not is_following %}-->
+                <!--                        <a class="follow-button" href="{% url 'accounts:follow' post.user.id %}">Follow</a>-->
+                <!--                    {% else %}-->
+                <!--                        <a class="follow-button" href="{% url 'accounts:unfollow' post.user.id %}">Unfollow</a>-->
+                <!--                    {% endif %}-->
+
                             </div>
                             <div class="post-caption">
-                                <p>{{ post.body|safe|slice:":300" }}{% if post.body|length >= 300 %}<span id="dots-{{post.id}}">...</span><span class="more-caption" id="more-{{post.id}}">{{ post.body|safe|slice:"300:" }}</span><button onclick="myFunction({{post.id}})" id="myBtn-{{post.id}}">Read more</button></p>
+                                <p>{{ post.body|safe|slice:":300" }}{% if post.body|length >= 300 %}<span id="dots-{{post.id}}">...</span><span class="more-caption" id="more-{{post.id}}">{{ post.body|safe|slice:"300:" }}</span>
+                                        <button onclick="myFunction({{post.id}})" id="myBtn-{{post.id}}">Read more</button></p>
                                     {% endif %}
                             </div>
                             <div class="post-image">
                                 {% if post.image %}
-                                     <img src="{{ post.image.url }}" alt="">
+                                <img src="{{ post.image.url }}">
                                 {% endif %}
                             </div>
 
@@ -87,9 +117,14 @@
 
                             <div class="like-comment-save-share">
                                 <div class="left-like">
-                                    <a href=""><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                    {% if check_like %}
+                                        <a href="{% url 'posts:dislike_post' post.id %}"><i class="fa fa-heart" aria-hidden="true"></i></a>
+                                    {% else %}
+                                        <a href="{% url 'posts:like_post' post.id %}"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                    {% endif %}
+
                                     <a href=""><i class="fa fa-comment-o" aria-hidden="true"></i></a>
-                                    <!-- <a href=""><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a> -->
+                                    <a href=""><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
                                 </div>
                                 <div class="right-save">
                                     <a href=""><i class="fa fa-bookmark-o" aria-hidden="true"></i></a>
@@ -97,7 +132,9 @@
                             </div>
                         </div>
                     {% empty %}
-                                    <p>post list is empty...</p>
+                        <div class="empty-profile">
+                            <p>This profile don't have any post...</p>
+                        </div>
                     {% endfor %}
             </div>
 
